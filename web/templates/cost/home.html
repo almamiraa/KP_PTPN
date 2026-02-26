@@ -1,0 +1,187 @@
+{% extends "cost/base.html" %} 
+{% block title %}Home - Cost Converter{% endblock %} 
+
+{% block extra_css %}
+<style>
+    .hero-section {
+        padding: 60px 0 40px;
+    }
+    
+    .hero-title {
+        color: var(--dark-green);
+        font-weight: 800;
+        letter-spacing: -1.5px;
+        font-size: 3.5rem;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .card-feature {
+        border-radius: 24px;
+        border: none;
+        transition: all 0.3s ease;
+        background: white;
+        box-shadow: var(--shadow-md);
+    }
+
+    .card-feature:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .icon-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 2rem;
+    }
+
+    .step-circle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .section-header {
+        border: none;
+        background: transparent;
+        color: var(--primary-green);
+        font-weight: 800;
+        font-size: 1.25rem;
+        padding-bottom: 0;
+    }
+
+    .list-info li {
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 500;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+        border: none;
+        transition: all 0.3s;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, var(--dark-green) 0%, var(--primary-green) 100%);
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .btn-outline-success {
+        border: 2px solid var(--primary-green);
+        color: var(--primary-green);
+        font-weight: 600;
+    }
+
+    .btn-outline-success:hover {
+        background: var(--primary-green);
+        color: white;
+        transform: translateY(-3px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero-section text-center">
+    <div class="mb-4">
+        <div class="d-inline-block p-3 rounded-circle shadow-sm mb-3" 
+             style="background: linear-gradient(135deg, var(--cream-bg), #ffffff);">
+            <i class="fas fa-dollar-sign fa-3x" style="color: var(--primary-green);"></i>
+        </div>
+    </div>
+    <h1 class="hero-title mb-3">Konsolidasi Biaya</h1>
+    <p class="lead text-muted mx-auto" style="max-width: 600px;">
+        Solusi cerdas untuk konversi dan analisis data biaya (REAL vs RKAP) dengan akurasi tinggi dan proses yang efisien.
+    </p>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="card card-feature h-100">
+            <div class="card-body text-center p-5">
+                <div class="icon-circle" style="background: linear-gradient(135deg, #e8f5f0, #f0fdf4); color: var(--primary-green);">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <h5 class="fw-bold">Upload Berkas</h5>
+                <p class="text-muted small mb-4">Unggah file Excel cost data sesuai format template PTPN.</p>
+                <a href="{{ url_for('cost.upload') }}" class="btn btn-primary w-100">
+                    <i class="fas fa-upload me-2"></i>
+                    Mulai Upload
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-feature h-100">
+            <div class="card-body text-center p-5">
+                <div class="icon-circle" style="background: linear-gradient(135deg, #f1f8e8, #fbfada); color: var(--secondary-green);">
+                    <i class="fas fa-cogs fa-spin" style="animation-duration: 3s;"></i>
+                </div>
+                <h5 class="fw-bold">Konversi Otomatis</h5>
+                <p class="text-muted small mb-4">Sistem membaca periode, mendeteksi kolom, dan menyimpan ke database.</p>
+                <span class="badge rounded-pill px-3 py-2" 
+                      style="background: var(--success-green); color: var(--dark-green);">
+                    <i class="fas fa-bolt me-1"></i> Auto Processing
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-feature h-100">
+            <div class="card-body text-center p-5">
+                <div class="icon-circle" style="background: linear-gradient(135deg, #e0f2f1, #b2dfdb); color: #00796b;">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h5 class="fw-bold">Dashboard & Analisis</h5>
+                <p class="text-muted small mb-4">Monitor achievement, tren cost, dan perbandingan REAL vs RKAP.</p>
+                <a href="{{ url_for('cost.dashboard') }}" class="btn btn-outline-success w-100">
+                    <i class="fas fa-chart-line me-1"></i>
+                    Lihat Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-feature mb-5">
+    <div class="card-header section-header pt-4 ps-4">
+        <i class="fas fa-route me-2"></i>Alur Penggunaan Sistem
+    </div>
+    <div class="card-body p-4 p-lg-5">
+        <div class="row">
+            {% set steps = [
+                (1, 'Pilih File', 'Upload Excel cost data format PTPN.', 'var(--primary-green)'),
+                (2, 'Deteksi Otomatis', 'Sistem detect periode & kolom REAL/RKAP.', 'var(--secondary-green)'),
+                (3, 'Proses Data', 'Validasi & simpan ke database DBcost.', 'var(--success-green)'),
+                (4, 'Analisis', 'Dashboard analytics & download hasil.', '#51829b')
+            ] %}
+            
+            {% for step, title, desc, color in steps %}
+            <div class="col-md-3 text-center mb-4 mb-md-0">
+                <div class="step-circle text-white" style="background: {{ color }};">
+                    {{ step }}
+                </div>
+                <h6 class="fw-bold">{{ title }}</h6>
+                <p class="text-muted small mb-0">{{ desc }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

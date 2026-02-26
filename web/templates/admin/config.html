@@ -1,0 +1,780 @@
+{% extends "base.html" %}
+
+{% block title %}Configuration Manager{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Admin Header: Modern Glassmorphism Style */
+    .admin-header {
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+        color: white;
+        padding: 3.5rem 0 5rem; /* Padding bawah lebih besar untuk efek layering */
+        margin-bottom: 0;
+        border-radius: 0 0 40px 40px;
+        box-shadow: var(--shadow-lg);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .admin-header::before {
+        content: '';
+        position: absolute;
+        top: -50%; right: -10%; width: 400px; height: 400px;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+
+    /* Info Box: Menumpuk sedikit ke header */
+    .admin-info-box {
+        background: white;
+        border-left: 6px solid var(--primary-green);
+        padding: 1.5rem;
+        margin-top: -40px; 
+        margin-bottom: 2.5rem;
+        border-radius: 16px;
+        box-shadow: var(--shadow-md);
+        position: relative;
+        z-index: 10;
+        color: var(--dark-green);
+    }
+    
+/* Tabs Styling: Modern Pill Style (Updated for Active/Passive Consistency) */
+    .nav-tabs {
+        border: none;
+        gap: 12px;
+    }
+
+    .nav-tabs .nav-link {
+        /* TULISAN SAAT PASSIVE: Hijau gelap agar tidak silau */
+        color: var(--dark-green) !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f8faf7 100%);
+        border: 2px solid var(--sage-green);
+        border-radius: 14px !important;
+        font-weight: 600;
+        padding: 0.8rem 1.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Warna Ikon saat Pasif */
+    .nav-tabs .nav-link i {
+        color: var(--primary-green) !important;
+    }
+    
+    .nav-tabs .nav-link:hover {
+        background-color: #f1f8e8;
+        border-color: var(--primary-green);
+        color: var(--primary-green) !important;
+        transform: translateY(-2px);
+    }
+
+    .nav-tabs .nav-link.active {
+        /* SAAT ACTIVE: Latar Gelap, Tulisan Putih Bersih */
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%) !important;
+        color: #ffffff !important;
+        border-color: transparent;
+        box-shadow: 0 6px 16px rgba(18, 55, 42, 0.3);
+        transform: translateY(-2px);
+    }
+
+    /* Ikon saat Aktif */
+    .nav-tabs .nav-link.active i {
+        color: #ffffff !important;
+    }
+    
+    /* Badge Penghitung */
+    .company-count-badge {
+        /* SAAT PASSIVE: Senada dengan tulisan pasif */
+        background: rgba(67, 104, 80, 0.1);
+        color: var(--dark-green) !important;
+        padding: 0.2rem 0.7rem;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        margin-left: 0.8rem;
+        font-weight: 700;
+        border: 1px solid var(--sage-green);
+    }
+
+    .nav-tabs .nav-link.active .company-count-badge {
+        /* SAAT ACTIVE: Putih transparan agar kontras */
+        background: rgba(255, 255, 255, 0.2);
+        color: #ffffff !important;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    /* Table Container */
+    .table-container {
+        background: white;
+        border-radius: 24px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        border: 1px solid #eef2ed;
+    }
+
+    .table thead th {
+        background-color: #f8faf7;
+        color: var(--primary-green);
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        padding: 1.2rem 1rem;
+        border-bottom: 2px solid var(--sage-green);
+    }
+
+    .table tbody td {
+        padding: 1.2rem 1rem;
+        vertical-align: middle;
+        color: #475569;
+        font-size: 0.9rem;
+    }
+
+    /* Action Buttons in Table */
+    .action-buttons .btn {
+        width: 34px;
+        height: 34px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        margin: 0 2px;
+        border: none;
+    }
+
+    /* Modal Styling */
+    .modal-content {
+        border-radius: 28px;
+        border: none;
+        box-shadow: var(--shadow-lg);
+    }
+
+    .modal-header {
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+        color: white;
+        padding: 1.5rem 2rem;
+        border: none;
+    }
+
+    /* Button Colors & Shadows */
+    .btn-success { background: var(--primary-green); border: none; box-shadow: 0 4px 10px rgba(67, 104, 80, 0.2); }
+    .btn-success:hover { background: var(--dark-green); transform: translateY(-2px); }
+    
+    .btn-info { background: var(--secondary-green); border: none; color: white; }
+    .btn-warning { background: #ffcf96; color: #92400e; }
+    .btn-danger { background: var(--danger); border: none; }
+
+    .required-field::after { content: " *"; color: var(--danger); }
+    
+    kbd { background-color: var(--dark-green); color: var(--cream-accent); border-radius: 4px; padding: 2px 6px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="admin-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8 text-start">
+                    <h1 class="display-6 fw-bold mb-2"><i class="fas fa-sliders-h me-2"></i> Configuration Manager</h1>
+                    <p class="opacity-75 mb-0 fs-5">Panel pusat kendali konfigurasi entitas dan unit bisnis PTPN</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="btn btn-light shadow-sm fw-bold px-4 py-2" onclick="reloadAllConfig()" style="border-radius: 14px; color: var(--primary-green);">
+                        <i class="fas fa-sync-alt me-2"></i> Sinkronisasi Data
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="admin-info-box d-flex align-items-center">
+            <div class="me-4 fs-3 opacity-50">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <div>
+                <h6 class="fw-bold mb-1">Mode Administrator Aktif</h6>
+                <p class="mb-0 small text-muted">Kelola data perusahaan secara real-time. Perubahan akan langsung diperbarui pada sistem. Tekan <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd> untuk menutup panel admin.</p>
+            </div>
+        </div>
+
+        <ul class="nav nav-tabs mb-4" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="demografi-tab" data-bs-toggle="tab" data-bs-target="#demografi" type="button" role="tab">
+                    <i class="fas fa-users me-2"></i> Demografi SDM
+                    <span class="company-count-badge" id="demografi-count">0</span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="cost-tab" data-bs-toggle="tab" data-bs-target="#cost" type="button" role="tab">
+                    <i class="fas fa-dollar-sign me-2"></i> Konsolidasi Biaya
+                    <span class="company-count-badge" id="cost-count">0</span>
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content pb-5">
+            <div class="tab-pane fade show active" id="demografi" role="tabpanel">
+                <div class="table-container">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-list-ul me-2 text-success"></i> Entitas Demografi</h5>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-success btn-sm px-3" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#demografiModal"
+                                    onclick="resetDemografiForm()">
+                                <i class="fas fa-plus me-1"></i> Add Company
+                            </button>
+                            <button class="btn btn-info btn-sm px-3" onclick="exportConfig('demografi')">
+                                <i class="fas fa-download me-1"></i> Export JSON
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table id="demografiTable" class="table table-hover">
+                           <thead>
+                            <tr>
+                                <th>Key</th>
+                                <th>Kode</th>
+                                <th>Nama Perusahaan</th>
+                                <th>Sheet Name</th>
+                                <th>Kategori</th>
+                                <th>Holding</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="cost" role="tabpanel">
+                <div class="table-container">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="fw-bold mb-0 text-dark"><i class="fas fa-list-ul me-2 text-info"></i> Entitas Cost Management</h5>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-success btn-sm px-3" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#costModal"
+                                    onclick="resetCostForm()">
+                                <i class="fas fa-plus me-1"></i> Add Company
+                            </button>
+                            <button class="btn btn-info btn-sm px-3" onclick="exportConfig('cost')">
+                                <i class="fas fa-download me-1"></i> Export JSON
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table id="costTable" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Key</th>
+                                    <th>Kode</th>
+                                    <th>Nama Perusahaan</th>
+                                    <th>Sheet Name</th>
+                                    <th>Holding</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="demografiModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i> <span id="demografiModalTitle">Company Info</span></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="demografiForm">
+                    <input type="hidden" id="demografi_original_key">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold required-field">Config Key</label>
+                        <input type="text" class="form-control px-3 py-2" id="demografi_key" placeholder="ptpn_x" required style="border-radius: 10px;">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold required-field">Kode Perusahaan</label>
+                        <input type="text" class="form-control px-3 py-2" id="demografi_kode" placeholder="1000" required style="border-radius: 10px;">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold required-field">Nama Perusahaan</label>
+                        <input type="text" class="form-control px-3 py-2" id="demografi_nama" placeholder="PT PTPN X" required style="border-radius: 10px;">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold required-field">Sheet Name</label>
+                        <input type="text" class="form-control px-3 py-2" id="demografi_sheet" placeholder="HOPalmCo" required style="border-radius: 10px;">
+                        <small class="text-muted">Nama sheet di Excel (tanpa spasi, sesuai dengan file)</small>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Kategori</label>
+                            <select class="form-select py-2" id="demografi_kategori" style="border-radius: 10px;">
+                                <option value="Sub Holding">Sub Holding</option>
+                                <option value="Non PTPN">Non PTPN</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Holding</label>
+                            <input type="text" class="form-control py-2" id="demografi_holding" style="border-radius: 10px;">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0 p-4 pt-0">
+                <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal" style="border-radius: 12px;">Batal</button>
+                <button type="button" class="btn btn-primary px-4 shadow" onclick="saveDemografiCompany()" style="border-radius: 12px; background: var(--primary-green);">Simpan Data</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="costModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i> <span id="costModalTitle">Cost Config Info</span></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="costForm">
+                    <input type="hidden" id="cost_original_key">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold required-field">Config Key</label>
+                        <input type="text" class="form-control py-2" id="cost_key" required style="border-radius: 10px;">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold required-field">Kode Perusahaan</label>
+                        <input type="text" class="form-control py-2" id="cost_kode" required style="border-radius: 10px;">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold required-field">Nama Perusahaan</label>
+                        <input type="text" class="form-control py-2" id="cost_nama" required style="border-radius: 10px;">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold required-field">Sheet Name</label>
+                        <input type="text" class="form-control py-2" id="cost_sheet" required style="border-radius: 10px;">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Holding</label>
+                        <input type="text" class="form-control py-2" id="cost_holding" style="border-radius: 10px;">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0 p-4 pt-0">
+                <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal" style="border-radius: 12px;">Batal</button>
+                <button type="button" class="btn btn-primary px-4 shadow" onclick="saveCostCompany()" style="border-radius: 12px; background: var(--primary-green);">Simpan Data</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let demografiTable, costTable;
+
+$(document).ready(function() {
+    // Initialize DataTables
+    demografiTable = $('#demografiTable').DataTable({
+        pageLength: 25,
+        order: [[0, 'asc']],
+        columnDefs: [{ orderable: false, targets: 6 }],
+        language: {
+            search: "Cari:",
+            lengthMenu: "Tampilkan _MENU_ data",
+            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+            paginate: {
+                first: "Pertama",
+                last: "Terakhir",
+                next: "Selanjutnya",
+                previous: "Sebelumnya"
+            }
+        }
+    });
+    
+    costTable = $('#costTable').DataTable({
+        pageLength: 25,
+        order: [[0, 'asc']],
+        autoWidth: false,
+        responsive: true,
+        columnDefs: [{ orderable: false, targets: 5 }],
+        language: {
+            search: "Cari:",
+            lengthMenu: "Tampilkan _MENU_ data",
+            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+            paginate: {
+                first: "Pertama",
+                last: "Terakhir",
+                next: "Selanjutnya",
+                previous: "Sebelumnya"
+            }
+        }
+    });
+    
+    loadDemografiCompanies();
+    loadCostCompanies();
+    
+   $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
+    $.fn.dataTable.tables({ visible: true, api: true })
+        .columns.adjust()
+        .responsive.recalc();
+});
+});
+
+// ✅ CRITICAL: Cleanup script dari demografi/upload.html yang berhasil
+window.addEventListener('click', () => {
+    if (document.body.classList.contains('modal-open')) {
+        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+        document.body.classList.remove('modal-open');
+        document.body.style.paddingRight = '';
+    }
+});
+
+// ============================================================================
+// DEMOGRAFI FUNCTIONS
+// ============================================================================
+
+function loadDemografiCompanies() {
+    $.ajax({
+        url: '/admin/api/companies/demografi',
+        method: 'GET',
+        success: function(response) {
+            if (response.success) {
+                demografiTable.clear();
+                
+                response.companies.forEach(function(company) {
+                    const companyJson = JSON.stringify(company).replace(/'/g, "\\'");
+                    demografiTable.row.add([
+                        company.key,
+                        company.kode_perusahaan,
+                        company.nama,
+                        company.sheet_name || '-',
+                        company.kategori || '-',
+                        company.holding || '-',
+                        `<div class="action-buttons text-center">
+                            <button class="btn btn-sm btn-warning" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#demografiModal"
+                                    onclick='fillEditDemografi(${companyJson})' 
+                                    title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" 
+                                    onclick='deleteDemografiCompany("${company.key}", "${company.nama.replace(/"/g, '&quot;')}")' 
+                                    title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>`
+                    ]);
+                });
+                
+                demografiTable.draw();
+                $('#demografi-count').text(response.total);
+                
+                // ✅ Force column adjustment after draw
+                setTimeout(function() {
+                    demografiTable.columns.adjust().draw();
+                }, 100);
+            }
+        },
+        error: function(xhr) {
+            showAlert('error', 'Gagal memuat data: ' + (xhr.responseJSON?.error || 'Unknown error'));
+        }
+    });
+}
+
+function resetDemografiForm() {
+    $('#demografiForm')[0].reset();
+    $('#demografi_original_key').val('');
+    $('#demografi_key').prop('disabled', false);
+    $('#demografiModalTitle').text('Tambah Perusahaan Demografi');
+}
+
+function fillEditDemografi(company) {
+    $('#demografi_original_key').val(company.key);
+    $('#demografi_key').val(company.key).prop('disabled', true);
+    $('#demografi_kode').val(company.kode_perusahaan);
+    $('#demografi_nama').val(company.nama);
+    $('#demografi_sheet').val(company.sheet_name || '');
+    $('#demografi_kategori').val(company.kategori || 'Sub Holding');
+    $('#demografi_holding').val(company.holding || '');
+    $('#demografiModalTitle').text('Edit Perusahaan Demografi');
+}
+
+function saveDemografiCompany() {
+    const originalKey = $('#demografi_original_key').val();
+    const key = $('#demografi_key').val().trim();
+    const kode = $('#demografi_kode').val().trim();
+    const nama = $('#demografi_nama').val().trim();
+    const sheet = $('#demografi_sheet').val().trim(); 
+    const kategori = $('#demografi_kategori').val();
+    const holding = $('#demografi_holding').val().trim();
+    
+    if (!key || !kode || !nama || !sheet) {  
+        showAlert('warning', 'Mohon lengkapi semua field yang wajib diisi');
+        return;
+    }
+    
+    const data = {
+        key: key,
+        kode_perusahaan: kode,
+        nama: nama,
+        sheet_name: sheet,  
+        kategori: kategori,
+        holding: holding
+    };
+    
+    const isEdit = originalKey !== '';
+    const url = isEdit ? `/admin/api/companies/demografi/${originalKey}` : '/admin/api/companies/demografi';
+    const method = isEdit ? 'PUT' : 'POST';
+    
+    $.ajax({
+        url: url,
+        method: method,
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function(response) {
+            if (response.success) {
+                showAlert('success', response.message);
+                $('#demografiModal').modal('hide');
+                loadDemografiCompanies();
+            } else {
+                showAlert('error', response.error || 'Gagal menyimpan data');
+            }
+        },
+        error: function(xhr) {
+            showAlert('error', xhr.responseJSON?.error || 'Gagal menyimpan data');
+        }
+    });
+}
+
+function deleteDemografiCompany(key, nama) {
+    if (!confirm(`Yakin ingin menghapus "${nama}"?\n\nData tidak dapat dikembalikan.`)) {
+        return;
+    }
+    
+    $.ajax({
+        url: `/admin/api/companies/demografi/${key}`,
+        method: 'DELETE',
+        success: function(response) {
+            if (response.success) {
+                showAlert('success', response.message);
+                loadDemografiCompanies();
+            } else {
+                showAlert('error', response.error || 'Gagal menghapus data');
+            }
+        },
+        error: function(xhr) {
+            showAlert('error', xhr.responseJSON?.error || 'Gagal menghapus data');
+        }
+    });
+}
+
+// ============================================================================
+// COST FUNCTIONS
+// ============================================================================
+
+function loadCostCompanies() {
+    $.ajax({
+        url: '/admin/api/companies/cost',
+        method: 'GET',
+        success: function(response) {
+            if (response.success) {
+                costTable.clear();
+                
+                response.companies.forEach(function(company) {
+                    const companyJson = JSON.stringify(company).replace(/'/g, "\\'");
+                    costTable.row.add([
+                        company.key,
+                        company.kode_perusahaan,
+                        company.nama,
+                        company.sheet_name || '-',
+                        company.holding || '-',
+                        `<div class="action-buttons text-center">
+                            <button class="btn btn-sm btn-warning" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#costModal"
+                                    onclick='fillEditCost(${companyJson})' 
+                                    title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" 
+                                    onclick='deleteCostCompany("${company.key}", "${company.nama.replace(/"/g, '&quot;')}")' 
+                                    title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>`
+                    ]);
+                });
+                
+                costTable.draw();
+                $('#cost-count').text(response.total);
+
+                setTimeout(function() {
+                    costTable.columns.adjust().draw();
+                }, 100);
+            }
+        },
+        error: function(xhr) {
+            showAlert('error', 'Gagal memuat data: ' + (xhr.responseJSON?.error || 'Unknown error'));
+        }
+    });
+}
+
+function resetCostForm() {
+    $('#costForm')[0].reset();
+    $('#cost_original_key').val('');
+    $('#cost_key').prop('disabled', false);
+    $('#costModalTitle').text('Tambah Perusahaan Cost');
+}
+
+function fillEditCost(company) {
+    $('#cost_original_key').val(company.key);
+    $('#cost_key').val(company.key).prop('disabled', true);
+    $('#cost_kode').val(company.kode_perusahaan);
+    $('#cost_nama').val(company.nama);
+    $('#cost_sheet').val(company.sheet_name || '');
+    $('#cost_holding').val(company.holding || '');
+    $('#costModalTitle').text('Edit Perusahaan Cost');
+}
+
+function saveCostCompany() {
+    const originalKey = $('#cost_original_key').val();
+    const key = $('#cost_key').val().trim();
+    const kode = $('#cost_kode').val().trim();
+    const nama = $('#cost_nama').val().trim();
+    const sheet = $('#cost_sheet').val().trim();
+    const holding = $('#cost_holding').val().trim();
+    
+    if (!key || !kode || !nama || !sheet) {
+        showAlert('warning', 'Mohon lengkapi semua field yang wajib diisi');
+        return;
+    }
+    
+    const data = {
+        key: key,
+        kode_perusahaan: kode,
+        nama: nama,
+        sheet_name: sheet,
+        holding: holding
+    };
+    
+    const isEdit = originalKey !== '';
+    const url = isEdit ? `/admin/api/companies/cost/${originalKey}` : '/admin/api/companies/cost';
+    const method = isEdit ? 'PUT' : 'POST';
+    
+    $.ajax({
+        url: url,
+        method: method,
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function(response) {
+            if (response.success) {
+                showAlert('success', response.message);
+                $('#costModal').modal('hide');
+                loadCostCompanies();
+            } else {
+                showAlert('error', response.error || 'Gagal menyimpan data');
+            }
+        },
+        error: function(xhr) {
+            showAlert('error', xhr.responseJSON?.error || 'Gagal menyimpan data');
+        }
+    });
+}
+
+function deleteCostCompany(key, nama) {
+    if (!confirm(`Yakin ingin menghapus "${nama}"?\n\nData tidak dapat dikembalikan.`)) {
+        return;
+    }
+    
+    $.ajax({
+        url: `/admin/api/companies/cost/${key}`,
+        method: 'DELETE',
+        success: function(response) {
+            if (response.success) {
+                showAlert('success', response.message);
+                loadCostCompanies();
+            } else {
+                showAlert('error', response.error || 'Gagal menghapus data');
+            }
+        },
+        error: function(xhr) {
+            showAlert('error', xhr.responseJSON?.error || 'Gagal menghapus data');
+        }
+    });
+}
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+function reloadAllConfig() {
+    if (!confirm('Reload semua konfigurasi dari file JSON?')) {
+        return;
+    }
+    
+    $.ajax({
+        url: '/admin/api/reload-config',
+        method: 'POST',
+        success: function(response) {
+            if (response.success) {
+                showAlert('success', response.message);
+                loadDemografiCompanies();
+                loadCostCompanies();
+            } else {
+                showAlert('error', response.error || 'Gagal reload konfigurasi');
+            }
+        },
+        error: function(xhr) {
+            showAlert('error', xhr.responseJSON?.error || 'Gagal reload konfigurasi');
+        }
+    });
+}
+
+function exportConfig(module) {
+    window.location.href = `/admin/api/export-config/${module}`;
+    showAlert('info', `Mengunduh backup konfigurasi ${module}...`);
+}
+
+function showAlert(type, message) {
+    const alertClass = type === 'success' ? 'alert-success' :
+                      type === 'error' ? 'alert-danger' :
+                      type === 'warning' ? 'alert-warning' : 'alert-info';
+    
+    const iconClass = type === 'success' ? 'check-circle' : 
+                     type === 'error' ? 'exclamation-circle' : 
+                     type === 'warning' ? 'exclamation-triangle' : 'info-circle';
+    
+    const alertHtml = `
+        <div class="alert ${alertClass} alert-dismissible fade show position-fixed" 
+             style="top: 90px; right: 30px; z-index: 9999; min-width: 350px; box-shadow: var(--shadow-lg); border-radius: 16px;"
+             role="alert">
+            <div class="d-flex align-items-start">
+                <i class="fas fa-${iconClass} me-3 mt-1" style="font-size: 1.3rem;"></i>
+                <div class="flex-grow-1">${message}</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `;
+    
+    $('body').append(alertHtml);
+    
+    setTimeout(function() {
+        $('.alert').fadeOut(function() {
+            $(this).remove();
+        });
+    }, 5000);
+}
+</script>
+{% endblock %}

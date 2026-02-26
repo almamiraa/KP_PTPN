@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+
+{% block title %}Home - PTPN Unified Converter{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ==============================
+       Hero Section (Compact Version)
+    ============================== */
+    .hero-section {
+        text-align: center;
+        padding: 35px 0 20px;
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-title {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        font-size: 2.6rem;
+        color: var(--primary-green);
+        margin-bottom: 15px;
+        line-height: 1.2;
+    }
+
+    .hero-subtitle {
+        font-size: 1.05rem;
+        color: var(--secondary-green);
+        margin-bottom: 30px;
+        font-weight: 500;
+    }
+
+    .hero-icon {
+        font-size: 3.8rem;
+        color: var(--sage-green);
+        margin-bottom: 20px;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+    }
+
+    /* ==============================
+       Module Cards (More Compact)
+    ============================== */
+    .module-card {
+        border: none;
+        border-radius: 25px;
+        overflow: hidden;
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        background: white;
+        height: 100%;
+        cursor: pointer;
+        position: relative;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .module-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 5px;
+        background: linear-gradient(90deg, var(--primary-green), var(--success-green));
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.35s ease;
+    }
+
+    .module-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .module-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(67, 104, 80, 0.12);
+    }
+
+    .module-card-body {
+        padding: 35px 25px;
+        text-align: center;
+    }
+
+    .module-icon {
+        font-size: 3.5rem;
+        margin-bottom: 20px;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .module-card:hover .module-icon {
+        transform: scale(1.08) rotate(3deg);
+    }
+
+    .module-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: var(--dark-green);
+    }
+
+    .module-description {
+        color: #6c757d;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+
+    .demografi-card {
+        background: linear-gradient(135deg, #f1f8e8 0%, #ffffff 100%);
+    }
+
+    .demografi-card .module-icon {
+        color: var(--primary-green);
+    }
+
+    .cost-card {
+        background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%);
+    }
+
+    .cost-card .module-icon {
+        color: var(--secondary-green);
+    }
+
+    /* ==============================
+       Features Section
+    ============================== */
+    .features-section {
+        margin-top: 50px;
+        padding: 40px 25px;
+        background: white;
+        border-radius: 30px;
+        box-shadow: var(--shadow-md);
+    }
+
+    .feature-item {
+        text-align: center;
+        padding: 15px;
+    }
+
+    .feature-icon {
+        font-size: 2.2rem;
+        color: var(--sage-green);
+        margin-bottom: 12px;
+    }
+
+    .feature-title {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: var(--primary-green);
+        margin-bottom: 8px;
+    }
+
+    .feature-item p {
+        font-size: 0.9rem;
+        margin-bottom: 0;
+    }
+
+    /* ==============================
+       Stats Section (If Used Later)
+    ============================== */
+    .stats-section {
+        margin-top: 40px;
+        padding: 35px;
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+        border-radius: 25px;
+        color: white;
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 2.4rem;
+        font-weight: 700;
+        display: block;
+        color: var(--cream-accent);
+    }
+
+    /* ==============================
+       Responsive Tweaks
+    ============================== */
+    @media (max-width: 1200px) {
+        .hero-title {
+            font-size: 2.3rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 1.9rem;
+        }
+
+        .hero-icon {
+            font-size: 3rem;
+        }
+
+        .module-card {
+            margin-bottom: 20px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="hero-icon">
+        <i class="fas fa-leaf"></i>
+    </div>
+    <h1 class="hero-title">PTPN Converter</h1>
+    <p class="hero-subtitle">Sistem Konversi Data Terintegrasi untuk Demografi SDM & Konsolidasi Biaya</p>
+</div>
+
+<div class="row g-4 mt-2">
+    <div class="col-md-6">
+        <div class="card module-card demografi-card" onclick="location.href='{{ url_for('demografi.index') }}'">
+            <div class="module-card-body">
+                <div class="module-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h2 class="module-title">Demografi SDM</h2>
+                <p class="module-description">
+                    Konversi data demografi karyawan dari format Excel ke database terstruktur. 
+                    Mendukung dimensi: Gender, Pendidikan, Usia, Unit Kerja, dan Tren.
+                </p>
+                <span class="btn btn-primary px-4 py-2">
+                    <i class="fas fa-arrow-right me-2"></i>Mulai Konversi
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card module-card cost-card" onclick="location.href='{{ url_for('cost.home') }}'">
+            <div class="module-card-body">
+                <div class="module-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <h2 class="module-title">Konsolidasi Biaya</h2>
+                <p class="module-description">
+                    Konversi data biaya operasional dari Excel ke format database. 
+                    Mendukung REAL, RKAP, periode bulanan dan kumulatif (s.d.).
+                </p>
+                <span class="btn btn-primary px-4 py-2">
+                    <i class="fas fa-arrow-right me-2"></i>Mulai Konversi
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="features-section">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="feature-item">
+                <i class="fas fa-bolt feature-icon"></i>
+                <h3 class="feature-title">Cepat & Efisien</h3>
+                <p class="text-muted">Proses konversi data dalam hitungan detik dengan validasi otomatis.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-item">
+                <i class="fas fa-shield-halved feature-icon"></i>
+                <h3 class="feature-title">Aman</h3>
+                <p class="text-muted">Data tersimpan aman di database dengan backup berkala.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-item">
+                <i class="fas fa-chart-line feature-icon"></i>
+                <h3 class="feature-title">Analitik</h3>
+                <p class="text-muted">Visualisasi grafik interaktif untuk insight yang lebih mendalam.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

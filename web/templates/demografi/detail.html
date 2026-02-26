@@ -1,0 +1,481 @@
+{% extends "demografi/base.html" %}
+
+{% block title %}Detail Data Konversi - Demografi SDM{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Full width container */
+  .full-width-container {
+    width: 92vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -46vw;
+    margin-right: -46vw;
+    padding-bottom: 50px;
+  }
+
+  /* Header Section */
+  .page-header {
+    margin-bottom: 30px;
+  }
+
+  .page-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: var(--primary-green);
+    margin-bottom: 8px;
+  }
+
+  /* Menggunakan primary-green agar icon tidak terlalu neon */
+  .page-title i {
+    color: var(--primary-green);
+  }
+
+  .breadcrumb {
+    background: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .breadcrumb-item a {
+    color: var(--secondary-green);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .breadcrumb-item a:hover {
+    color: var(--dark-green);
+    text-decoration: underline;
+  }
+
+  .breadcrumb-item.active {
+    color: var(--sage-green);
+  }
+
+  /* Info Card */
+  .info-card {
+    background: #ffffff;
+    border: 2px solid var(--sage-green);
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s;
+  }
+
+  .info-card:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-green);
+  }
+
+  .info-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    color: #64748b; /* Muted slate agar label tidak mendominasi */
+    margin-bottom: 8px;
+    opacity: 0.8;
+  }
+
+  .info-value {
+    font-weight: 600;
+    color: var(--dark-green);
+    font-size: 1.05rem;
+  }
+
+  .info-value i {
+    color: var(--primary-green);
+  }
+
+  /* Stats Values */
+  .stat-value {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  /* Badge Styles */
+  .badge-periode {
+    background: var(--bg-light-sage, #f8faf7);
+    border: 2px solid var(--sage-green);
+    color: var(--primary-green);
+    padding: 8px 18px;
+    font-weight: 600;
+    border-radius: 12px;
+  }
+
+  .badge-warning-custom {
+    background: #fffcf0;
+    border: 2px solid #f2e6c2;
+    color: #d97706;
+    padding: 8px 18px;
+    font-weight: 600;
+  }
+
+    /* Tabs Styling */
+    .nav-pills .nav-link {
+    /* TULISAN SAAT PASSIVE: Diubah menjadi hijau gelap agar tidak silau */
+    color: var(--dark-green) !important; 
+    background: linear-gradient(135deg, #ffffff 0%, #f8faf7 100%);
+    border: 2px solid var(--sage-green);
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 12px 24px;
+    border-radius: 14px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 600;
+    }
+
+    /* Warna Ikon saat Pasif */
+    .nav-pills .nav-link i {
+    color: var(--primary-green) !important;
+    }
+
+    .nav-pills .nav-link:hover {
+    background: #f1f8e8;
+    border-color: var(--primary-green);
+    color: var(--primary-green) !important;
+    transform: translateY(-2px);
+    }
+
+    .nav-pills .nav-link.active {
+    /* SAAT ACTIVE: Tetap Latar Gelap, Tulisan Putih Bersih */
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%) !important;
+    color: #ffffff !important; 
+    border-color: transparent;
+    box-shadow: 0 6px 16px rgba(18, 55, 42, 0.3);
+    transform: translateY(-2px);
+    }
+
+    /* Badge di dalam Tab saat Pasif */
+    .nav-pills .nav-link .badge {
+    background: rgba(67, 104, 80, 0.1);
+    color: var(--dark-green) !important; 
+    border: 1px solid var(--sage-green);
+    }
+
+    /* Badge di dalam Tab saat Aktif */
+    .nav-pills .nav-link.active .badge {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    /* Ikon saat Aktif */
+    .nav-pills .nav-link.active i {
+    color: #ffffff !important;
+    }
+
+  /* Data Card */
+  .data-card {
+    background: white;
+    border: 2px solid #eef2ed;
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s;
+  }
+
+  .data-card:hover {
+    border-color: var(--sage-green);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .card-header-custom {
+    background: #ffffff;
+    border-bottom: 2px solid var(--sage-green);
+    padding: 24px 28px 16px;
+    border-radius: 20px 20px 0 0;
+  }
+
+  /* Table Styling */
+  .table-wrapper {
+    max-height: 650px;
+    overflow-y: auto;
+    border-radius: 16px;
+    border: 2px solid #eef2ed;
+  }
+
+  .table-wrapper::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  .table-wrapper::-webkit-scrollbar-track {
+    background: var(--bg-light-sage, #f8faf7);
+    border-radius: 10px;
+  }
+
+  .table-wrapper::-webkit-scrollbar-thumb {
+    background: var(--sage-green);
+    border-radius: 10px;
+  }
+
+  .table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-green);
+  }
+
+  .table thead th {
+    position: sticky;
+    top: 0;
+    background: #f8faf7; /* Putih sage solid agar tidak transparan saat scroll */
+    color: var(--primary-green);
+    z-index: 10;
+    border-bottom: 2px solid var(--sage-green);
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+    padding: 16px 12px;
+  }
+
+  .table tbody tr {
+    transition: all 0.2s;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .table tbody tr:hover {
+    background: #fcfdfc;
+    transform: scale(1.005);
+  }
+
+  .table tbody td {
+    padding: 14px 12px;
+  }
+
+  /* Empty State */
+  .empty-state {
+    background: #fcfdfc;
+    border: 2px dashed var(--sage-green);
+    border-radius: 24px;
+  }
+
+  .empty-icon {
+    color: var(--sage-green);
+    opacity: 0.5;
+  }
+
+  /* Buttons */
+  .btn-visualize {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 14px;
+    padding: 12px 28px;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+
+  .btn-visualize:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(18, 55, 42, 0.3);
+    color: #ffffff;
+  }
+
+  .btn-back {
+    background: white;
+    border: 2px solid var(--sage-green);
+    color: var(--primary-green);
+    border-radius: 14px;
+    padding: 12px 28px;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+
+  .btn-back:hover {
+    background: var(--bg-light-sage, #f8faf7);
+    border-color: var(--primary-green);
+    transform: translateY(-3px);
+  }
+
+  /* Preview Info */
+  .preview-info {
+    background: var(--bg-light-sage, #f8faf7);
+    border-left: 4px solid var(--primary-green);
+    padding: 12px 20px;
+    border-radius: 10px;
+    color: var(--dark-green);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="full-width-container">
+  <!-- Page Header -->
+  <div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="page-title">
+        <i class="fas fa-search me-2"></i>Pratinjau Data
+      </h2>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item">
+            <a href="{{ url_for('demografi.history') }}">History</a>
+          </li>
+          <li class="breadcrumb-item active">Detail Data</li>
+        </ol>
+      </nav>
+    </div>
+
+    <div class="d-flex gap-2">
+      <a href="{{ url_for('demografi.visualize') }}?conversion_id={{ history.id }}" 
+         class="btn btn-visualize shadow-sm">
+        <i class="fas fa-chart-bar me-2"></i>Visualisasi
+      </a>
+      <a href="{{ url_for('demografi.history') }}" 
+         class="btn btn-back shadow-sm d-inline-flex align-items-center justify-content-center" 
+         style="min-width: 140px;">
+        <i class="fas fa-arrow-left me-2"></i>
+        <span>Kembali</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Info Card -->
+  <div class="card info-card border-0 mb-4">
+    <div class="card-body p-4">
+      <div class="row align-items-center">
+        <div class="col-md-3 border-end">
+          <div class="info-label">Nama File</div>
+          <div class="info-value text-truncate" title="{{ history.original_filename }}">
+            <i class="fas fa-file-excel me-2"></i>{{ history.original_filename }}
+          </div>
+        </div>
+        <div class="col-md-2 border-end">
+          <div class="info-label">Periode</div>
+          <div class="info-value">
+            <span class="badge badge-periode">
+              <i class="far fa-calendar-alt me-1"></i>
+              {{ history.periode }}
+            </span>
+          </div>
+        </div>
+        <div class="col-md-3 border-end">
+          <div class="info-label">Perusahaan / Unit</div>
+          <div class="info-value">
+            <i class="fas fa-building me-2"></i>{{ history.perusahaan }}
+          </div>
+        </div>
+        <div class="col-md-4 text-center">
+          <div class="row">
+            <div class="col-4">
+              <div class="info-label">Total Baris</div>
+              <h5 class="stat-value" style="color: var(--primary-green);">
+                {{ "{:,}".format(history.total_rows) }}
+              </h5>
+            </div>
+            <div class="col-4 border-start">
+              <div class="info-label">Durasi</div>
+              <h5 class="stat-value" style="color: var(--success-green);">
+                {{ "%.2f"|format(history.duration) }}s
+              </h5>
+            </div>
+            <div class="col-4 border-start">
+              <div class="info-label">Dimensi</div>
+              <h5 class="stat-value" style="color: var(--secondary-green);">
+                {{ data|length }}
+              </h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if data %}
+  <!-- Data Card with Tabs -->
+  <div class="card data-card border-0">
+    <div class="card-header-custom border-0">
+      <ul class="nav nav-pills card-header-pills" id="dataTab" role="tablist">
+        {% for dimensi in data.keys() %}
+        <li class="nav-item" role="presentation">
+          <button class="nav-link {% if loop.first %}active{% endif %}" 
+                  data-bs-toggle="pill" 
+                  data-bs-target="#tab-{{ dimensi }}" 
+                  type="button">
+            <i class="fas fa-layer-group me-2"></i>
+            {{ dimensi.upper() }}
+            <span class="badge rounded-pill ms-2">
+              {{ "{:,}".format(data[dimensi].total_rows) }}
+            </span>
+          </button>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="card-body p-4">
+      <div class="tab-content" id="dataTabContent">
+        {% for dimensi, info in data.items() %}
+        <div class="tab-pane fade {% if loop.first %}show active{% endif %}" 
+             id="tab-{{ dimensi }}" 
+             role="tabpanel">
+          
+          <!-- Preview Info -->
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="preview-info flex-grow-1">
+              <i class="fas fa-eye me-2"></i>
+              Menampilkan <strong>{{ info.preview|length }}</strong> dari 
+              <strong>{{ "{:,}".format(info.total_rows) }}</strong> baris total
+            </div>
+            {% if info.total_rows > 100 %}
+            <span class="badge badge-warning-custom ms-3">
+              <i class="fas fa-exclamation-triangle me-1"></i>
+              Hanya pratinjau 100 baris
+            </span>
+            {% endif %}
+          </div>
+
+          <!-- Data Table -->
+          <div class="table-wrapper">
+            <table class="table table-hover align-middle mb-0">
+              <thead>
+                <tr>
+                  {% for col in info.columns %}
+                  <th>{{ col.replace('_', ' ').upper() }}</th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in info.preview %}
+                <tr>
+                  {% for col in info.columns %}
+                  <td class="small">
+                    {% if col == 'jumlah' %}
+                    <span class="fw-bold" style="color: var(--dark-green);">
+                      {{ "{:,}".format(row[col]) }}
+                    </span>
+                    {% elif col == 'periode' %}
+                    <span class="badge badge-periode">{{ row[col] }}</span>
+                    {% else %}
+                    {{ row[col] if row[col] != None else '-' }}
+                    {% endif %}
+                  </td>
+                  {% endfor %}
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  {% else %}
+  <!-- Empty State -->
+  <div class="card empty-state border-0 text-center py-5">
+    <div class="card-body">
+      <i class="fas fa-ghost fa-4x empty-icon mb-3"></i>
+      <h5 class="text-muted mb-3">Oops! Tidak ada data pratinjau yang tersedia.</h5>
+      <p class="text-muted mb-4">Data mungkin belum tersedia atau terjadi kesalahan saat memuat.</p>
+      <a href="{{ url_for('demografi.history') }}" class="btn btn-visualize px-5">
+        <i class="fas fa-arrow-left me-2"></i>
+        Kembali ke History
+      </a>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

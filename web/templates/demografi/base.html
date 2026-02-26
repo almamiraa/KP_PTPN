@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}SDM Converter{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Green Nature Palette - Hijau Rindang Theme */
+            --primary-green: #436850;
+            --secondary-green: #51829b;
+            --sage-green: #adbc9f;
+            --cream-bg: #f1f8e8;
+            --dark-green: #12372a;
+            --success-green: #8adab2;
+            --cream-accent: #fbfada;
+            --danger: #ff8080;
+            --warning: #ffcf96;
+            
+            --shadow-sm: 0 2px 8px rgba(67, 104, 80, 0.08);
+            --shadow-md: 0 4px 16px rgba(67, 104, 80, 0.12);
+            --shadow-lg: 0 10px 30px rgba(67, 104, 80, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--cream-bg) 0%, #ffffff 100%);
+            color: var(--dark-green);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+        }
+        .modal {
+        z-index: 2000 !important;
+        }
+        .modal-backdrop {
+            z-index: 1990 !important;
+        }
+        /* Modal smooth fade-in/out tambahan */
+        .modal.fade .modal-dialog {
+            transform: translateY(-50px);
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+
+        .modal.show .modal-dialog {
+            transform: translateY(0);
+        }
+
+        .modal-backdrop.fade {
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+        }
+
+        .modal-backdrop.show {
+            opacity: 0.5; /* Bisa diubah sesuai kebutuhan */
+        }
+        /* Texture Overlay */
+        .page-wrapper {
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ========== NAVBAR ========== */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+            box-shadow: var(--shadow-md);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--cream-accent) !important;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .brand-icon-circle {
+            background: var(--cream-accent);
+            color: var(--primary-green);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: leaf-sway 3s ease-in-out infinite;
+        }
+
+        @keyframes leaf-sway {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-8deg); }
+            75% { transform: rotate(8deg); }
+        }
+
+        .nav-link {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            font-size: 1rem;
+            color: rgba(251, 250, 218, 0.85) !important;
+            padding: 10px 20px !important;
+            margin: 0 4px;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-link:hover {
+            color: var(--cream-accent) !important;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            background: var(--cream-accent);
+            color: var(--primary-green) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            font-weight: 600;
+        }
+
+        /* ========== CONTENT ========== */
+        .main-wrapper {
+            flex: 1;
+            padding: 50px 0;
+        }
+
+        /* ========== ALERTS ========== */
+        .alert {
+            border-radius: 16px;
+            border: none;
+            padding: 18px 24px;
+            box-shadow: var(--shadow-sm);
+            border-left: 5px solid;
+            animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .alert-success { background: linear-gradient(135deg, #e8f5f0 0%, #ffffff 100%); border-left-color: var(--success-green); color: #2d6a4f; }
+        .alert-danger { background: linear-gradient(135deg, #ffe5e5 0%, #ffffff 100%); border-left-color: var(--danger); color: #c92a2a; }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            background: linear-gradient(135deg, var(--dark-green) 0%, var(--primary-green) 100%);
+            color: var(--sage-green);
+            padding: 50px 0 30px;
+            margin-top: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23fbfada' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+
+        .brand-footer {
+            font-family: 'Poppins', sans-serif;
+            color: var(--cream-accent);
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .footer-links a {
+            color: var(--sage-green);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            color: var(--cream-accent);
+            transform: translateY(-2px);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--cream-bg); }
+        ::-webkit-scrollbar-thumb { background: var(--primary-green); border-radius: 10px; }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="page-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <div class="brand-icon-circle">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <span>DEMOGRAFI DATA</span>
+                </a>
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'demografi.home' %}active{% endif %}" 
+                               href="{{ url_for('demografi.home') }}">
+                                <i class="fas fa-home me-1"></i> Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'demografi.monthly_dashboard' %}active{% endif %}" 
+                               href="{{ url_for('demografi.monthly_dashboard') }}">
+                                <i class="fas fa-calendar-alt me-1"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'demografi.history' %}active{% endif %}" 
+                               href="{{ url_for('demografi.history') }}">
+                                <i class="fas fa-history me-1"></i> Histori
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'demografi.index' %}active{% endif %}" 
+                               href="{{ url_for('demografi.index') }}">
+                                <i class="fas fa-file-export me-1"></i> Upload
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-wrapper">
+            <div class="container">
+                {% with messages = get_flashed_messages(with_categories=true) %} 
+                  {% if messages %} 
+                    {% for category, message in messages %}
+                      <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                        <div class="d-flex align-items-center">
+                          <i class="fas fa-{{ 'exclamation-circle' if category == 'error' else 'check-circle' }} me-3 fs-4"></i>
+                          <div>{{ message|safe }}</div>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
+                    {% endfor %} 
+                  {% endif %} 
+                {% endwith %} 
+
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content text-center" style="position: relative; z-index: 1;">
+                    <div class="mb-3">
+                        <span class="brand-footer">
+                            <i class="fas fa-seedling"></i>
+                            PTPN Converter
+                        </span>
+                    </div>
+                    <div class="footer-links">
+                        <a href="{{ url_for('main.index') }}">Home</a>
+                        <a href="{{ url_for('demografi.index') }}">Demografi</a>
+                        <a href="{{ url_for('cost.home') }}">Cost</a>
+                        <a href="{{ url_for('main.about') }}">About</a>
+                    </div>
+                    <p class="small mt-3">Sistem Konversi Data Terintegrasi</p>
+                    <p class="small opacity-50 mt-2">© 2026 PT Perkebunan Nusantara. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

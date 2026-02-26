@@ -1,0 +1,317 @@
+{% extends "base.html" %}
+{% block title %}Error - PTPN Unified Converter{% endblock %}
+
+{% block extra_css %}
+<style>
+  .error-container {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .error-card {
+    max-width: 600px;
+    width: 100%;
+    border: none;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(67, 104, 80, 0.15);
+    animation: slideUp 0.5s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .error-header {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .error-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+  }
+
+  .error-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .error-icon i {
+    font-size: 2.5rem;
+    color: white;
+    animation: shake 0.5s ease-in-out;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+  }
+
+  .error-code {
+    font-size: 4rem;
+    font-weight: 900;
+    color: white;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .error-title {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0.5rem 0 0 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .error-body {
+    padding: 2.5rem 2rem;
+    background: white;
+  }
+
+  .error-message {
+    background: linear-gradient(135deg, #f1f8e8 0%, #ffffff 100%);
+    border-left: 4px solid var(--primary-green);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .error-message p {
+    margin: 0;
+    color: var(--dark-green);
+    line-height: 1.6;
+  }
+
+  .suggestions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem 0;
+  }
+
+  .suggestions-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f1f8e8;
+    display: flex;
+    align-items: start;
+  }
+
+  .suggestions-list li:last-child {
+    border-bottom: none;
+  }
+
+  .suggestions-list i {
+    color: var(--success-green);
+    margin-right: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  .action-buttons .btn {
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary-green {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--success-green) 100%);
+    border: none;
+    color: white;
+  }
+
+  .btn-primary-green:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(67, 104, 80, 0.3);
+  }
+
+  .btn-outline-green {
+    border: 2px solid var(--sage-green);
+    color: var(--primary-green);
+    background: white;
+  }
+
+  .btn-outline-green:hover {
+    background: #f1f8e8;
+    border-color: var(--primary-green);
+    color: var(--dark-green);
+  }
+
+  .error-footer {
+    background: #f1f8e8;
+    padding: 1.5rem 2rem;
+    text-align: center;
+  }
+
+  .error-footer p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+  }
+
+  .error-footer a {
+    color: var(--primary-green);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .error-footer a:hover {
+    color: var(--dark-green);
+    text-decoration: underline;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="error-container">
+  <div class="error-card">
+    <!-- Error Header -->
+    <div class="error-header">
+      <div class="error-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      
+      {% if error_code %}
+      <h1 class="error-code">{{ error_code }}</h1>
+      {% endif %}
+      
+      <h2 class="error-title">
+        {% if error_title %}
+          {{ error_title }}
+        {% elif error_code == 404 %}
+          Halaman Tidak Ditemukan
+        {% elif error_code == 500 %}
+          Terjadi Kesalahan Server
+        {% elif error_code == 403 %}
+          Akses Ditolak
+        {% elif error_code == 413 %}
+          File Terlalu Besar
+        {% else %}
+          Terjadi Kesalahan
+        {% endif %}
+      </h2>
+    </div>
+
+    <!-- Error Body -->
+    <div class="error-body">
+      <!-- Error Message -->
+      <div class="error-message">
+        <p>
+          {% if error %}
+            {{ error }}
+          {% elif error_code == 404 %}
+            Maaf, halaman yang Anda cari tidak ditemukan. URL mungkin salah atau halaman telah dipindahkan.
+          {% elif error_code == 500 %}
+            Terjadi kesalahan pada server. Tim kami telah diberitahu dan sedang menangani masalah ini.
+          {% elif error_code == 403 %}
+            Anda tidak memiliki izin untuk mengakses halaman ini.
+          {% elif error_code == 413 %}
+            Ukuran file yang Anda upload melebihi batas maksimal (50MB).
+          {% else %}
+            Terjadi kesalahan yang tidak terduga. Silakan coba lagi atau hubungi administrator.
+          {% endif %}
+        </p>
+      </div>
+
+      <!-- Suggestions -->
+      <div class="mb-4">
+        <h6 class="fw-bold mb-3" style="color: var(--dark-green);">
+          <i class="fas fa-lightbulb me-2" style="color: var(--success-green);"></i>
+          Yang Dapat Anda Lakukan:
+        </h6>
+        <ul class="suggestions-list">
+          <li>
+            <i class="fas fa-check-circle"></i>
+            <span>Periksa kembali URL yang Anda masukkan</span>
+          </li>
+          <li>
+            <i class="fas fa-check-circle"></i>
+            <span>Kembali ke halaman sebelumnya dan coba lagi</span>
+          </li>
+          <li>
+            <i class="fas fa-check-circle"></i>
+            <span>Kunjungi halaman utama dan mulai dari awal</span>
+          </li>
+          {% if error_code == 500 %}
+          <li>
+            <i class="fas fa-check-circle"></i>
+            <span>Tunggu beberapa saat dan refresh halaman</span>
+          </li>
+          {% endif %}
+          {% if error_code == 413 %}
+          <li>
+            <i class="fas fa-check-circle"></i>
+            <span>Compress file Anda atau upload file yang lebih kecil</span>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons d-grid gap-3">
+        <button onclick="window.history.back()" class="btn btn-primary-green btn-lg">
+          <i class="fas fa-arrow-left me-2"></i>Kembali ke Halaman Sebelumnya
+        </button>
+        <a href="{{ url_for('main.index') }}" class="btn btn-outline-green btn-lg">
+          <i class="fas fa-home me-2"></i>Ke Halaman Utama
+        </a>
+      </div>
+    </div>
+
+    <!-- Error Footer -->
+    <div class="error-footer">
+      <p>
+        Butuh bantuan? 
+        <a href="{{ url_for('main.about') }}">Hubungi Support</a> atau 
+        <a href="{{ url_for('main.index') }}">Kembali ke Home</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Log error to console for debugging
+  console.error('Error Page:', {
+    code: '{{ error_code }}',
+    message: '{{ error }}',
+    url: window.location.href,
+    timestamp: new Date().toISOString()
+  });
+</script>
+{% endblock %}

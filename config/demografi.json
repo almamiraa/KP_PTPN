@@ -1,0 +1,677 @@
+{
+  "perusahaan": {
+    "HO Palm Co": {
+      "kode_perusahaan": "PHO0",
+      "nama": "HO Palm Co",
+      "sheet_name": "HOPalmCo",
+      "holding": "PTPN IV",
+      "kategori": "Sub Holding"
+    },
+    "Palm Co Reg 1": {
+      "kode_perusahaan": "1R00",
+      "nama": "Palm Co Reg 1",
+      "sheet_name": "PalmCo_Reg1",
+      "holding": "PTPN IV",
+      "kategori": "Sub Holding"
+    },
+    "Palm Co Reg 2": {
+      "kode_perusahaan": "2R00",
+      "nama": "Palm Co Reg 2",
+      "sheet_name": "PalmCo_Reg2",
+      "holding": "PTPN IV",
+      "kategori": "Sub Holding"
+    },
+    "Palm Co Reg 3": {
+      "kode_perusahaan": "3R00",
+      "nama": "Palm Co Reg 3",
+      "sheet_name": "PalmCo_Reg3",
+      "holding": "PTPN IV",
+      "kategori": "Sub Holding"
+    },
+    "Palm Co Reg 4": {
+      "kode_perusahaan": "4R00",
+      "nama": "Palm Co Reg 4",
+      "sheet_name": "PalmCo_Reg4",
+      "holding": "PTPN IV",
+      "kategori": "Sub Holding"
+    },
+    "Palm Co Reg 5": {
+      "kode_perusahaan": "5R00",
+      "nama": "Palm Co Reg 5",
+      "sheet_name": "PalmCo_Reg5",
+      "holding": "PTPN IV",
+      "kategori": "Sub Holding"
+    },
+    "KSO KBUTU": {
+      "kode_perusahaan": "9E04",
+      "nama": "KSO KBUTU",
+      "sheet_name": "KBUTU",
+      "holding": "PTPN IV",
+      "kategori": "Sub Holding"
+    },
+    "KSO DSMTU": {
+      "kode_perusahaan": "9D01",
+      "nama": "KSO DSMTU",
+      "sheet_name": "DSMTU",
+      "holding": "PTPN IV",
+      "kategori": "Sub Holding"
+    },
+    "KSO KSMTI": {
+      "kode_perusahaan": "9E01",
+      "nama": "KSO KSMTI",
+      "sheet_name": "KSMTI",
+      "holding": "PTPN IV",
+      "kategori": "Sub Holding"
+    },
+    "KSO PSMTI": {
+      "kode_perusahaan": "9F01",
+      "nama": "KSO PSMTI",
+      "sheet_name": "PSMTI",
+      "holding": "PTPN IV",
+      "kategori": "Sub Holding"
+    },
+    "KSO EX PTPN I": {
+      "kode_perusahaan": "LR00",
+      "nama": "KSO EX PTPN I",
+      "sheet_name": "KSO_EX_PTPN_I",
+      "holding": "PTPN IV",
+      "kategori": "Sub Holding"
+    },
+    "KSO EX PTPN II": {
+      "kode_perusahaan": "MR00",
+      "nama": "KSO EX PTPN II",
+      "sheet_name": "KSO_EX_PTPN_II",
+      "holding": "PTPN IV",
+      "kategori": "Sub Holding"
+    },
+    "KSO EX PTPN VII": {
+      "kode_perusahaan": "7R00",
+      "nama": "KSO EX PTPN VII",
+      "sheet_name": "KSO_EX_PTPN_VII",
+      "holding": "PTPN IV",
+      "kategori": "Sub Holding"
+    },
+    "KSO DJABA": {
+      "kode_perusahaan": "KD01",
+      "nama": "KSO DJABA",
+      "sheet_name": "KSO_DJABA",
+      "holding": "PTPN IV",
+      "kategori": "Sub Holding"
+    },
+    "KSO DATIM": {
+      "kode_perusahaan": "JD01",
+      "nama": "KSO DATIM",
+      "sheet_name": "KSO_DATIM",
+      "holding": "PTPN IV",
+      "kategori": "Sub Holding"
+    },
+    "DISTRIK KSO SULAWESI": {
+      "kode_perusahaan": "8R00",
+      "nama": "DISTRIK KSO SULAWESI",
+      "sheet_name": "DISTRIK_KSO_SULAWESI",
+      "holding": "PTPN IV",
+      "kategori": "Sub Holding"
+    },
+    "HO Supp Co": {
+      "kode_perusahaan": "HA00",
+      "nama": "HO Supp Co",
+      "sheet_name": "HOSuppCo",
+      "holding": "PTPN I",
+      "kategori": "Sub Holding"
+    },
+    "Supp Co Reg 1": {
+      "kode_perusahaan": "2S00",
+      "nama": "Supp Co Reg 1",
+      "sheet_name": "SuppCo_Reg1",
+      "holding": "PTPN I",
+      "kategori": "Sub Holding"
+    },
+    "Supp Co Reg 2": {
+      "kode_perusahaan": "4S00",
+      "nama": "Supp Co Reg 2",
+      "sheet_name": "SuppCo_Reg2",
+      "holding": "PTPN I",
+      "kategori": "Sub Holding"
+    },
+    "Supp Co Reg 3": {
+      "kode_perusahaan": "5S00",
+      "nama": "Supp Co Reg 3",
+      "sheet_name": "SuppCo_Reg3",
+      "holding": "PTPN I",
+      "kategori": "Sub Holding"
+    },
+    "Supp Co Reg 4": {
+      "kode_perusahaan": "6S00",
+      "nama": "Supp Co Reg 4",
+      "sheet_name": "SuppCo_Reg4",
+      "holding": "PTPN I",
+      "kategori": "Sub Holding"
+    },
+    "Supp Co Reg 5": {
+      "kode_perusahaan": "7S00",
+      "nama": "Supp Co Reg 5",
+      "sheet_name": "SuppCo_Reg5",
+      "holding": "PTPN I",
+      "kategori": "Sub Holding"
+    },
+    "Supp Co Reg 6": {
+      "kode_perusahaan": "1S00",
+      "nama": "Supp Co Reg 6",
+      "sheet_name": "SuppCo_Reg6",
+      "holding": "PTPN I",
+      "kategori": "Sub Holding"
+    },
+    "Supp Co Reg 7": {
+      "kode_perusahaan": "3S00",
+      "nama": "Supp Co Reg 7",
+      "sheet_name": "SuppCo_Reg7",
+      "holding": "PTPN I",
+      "kategori": "Sub Holding"
+    },
+    "Supp Co Reg 8": {
+      "kode_perusahaan": "8S00",
+      "nama": "Supp Co Reg 8",
+      "sheet_name": "SuppCo_Reg8",
+      "holding": "PTPN I",
+      "kategori": "Sub Holding"
+    },
+    "Holding": {
+      "kode_perusahaan": "CHOL",
+      "nama": "Holding",
+      "sheet_name": "Holding",
+      "holding": "PTPN III",
+      "kategori": "Sub Holding"
+    },
+    "Unit PISMK": {
+      "kode_perusahaan": "1F15",
+      "nama": "Unit PISMK",
+      "sheet_name": "PISMK",
+      "holding": "PTPN III",
+      "kategori": "Sub Holding"
+    },
+    "PT SGN": {
+      "kode_perusahaan": "S000",
+      "nama": "PT SGN",
+      "sheet_name": "SGN",
+      "holding": "SGN",
+      "kategori": "Sub Holding"
+    },
+    "PT KPBN": {
+      "kode_perusahaan": "KPBN",
+      "nama": "PT KPBN",
+      "sheet_name": "KPBN",
+      "holding": "KPBN",
+      "kategori": "Non PTPN"
+    },
+    "PT Kinra": {
+      "kode_perusahaan": "KIRA",
+      "nama": "PT kinra",
+      "sheet_name": "KINRA",
+      "holding": "KIRA",
+      "kategori": "Non PTPN"
+    },
+    "PT LPP": {
+      "kode_perusahaan": "LPPA",
+      "nama": "PT LPP",
+      "sheet_name": "LPPAN",
+      "holding": "LPPA",
+      "kategori": "Non PTPN"
+    },
+    "PT SPMN": {
+      "kode_perusahaan": "SPMN",
+      "nama": "PT SPMN",
+      "sheet_name": "SPMN",
+      "holding": "SPMN",
+      "kategori": "Non PTPN"
+    },
+    "PT IKN": {
+      "kode_perusahaan": "IKNA",
+      "nama": "PT IKN",
+      "sheet_name": "IKN",
+      "holding": "IKNA",
+      "kategori": "Non PTPN"
+    },
+    "PT BIN": {
+      "kode_perusahaan": "BINA",
+      "nama": "PT BIN",
+      "sheet_name": "BIN",
+      "holding": "BINA",
+      "kategori": "Non PTPN"
+    },
+    "PT RPN": {
+      "kode_perusahaan": "RPNA",
+      "nama": "PT RPN",
+      "sheet_name": "RPN",
+      "holding": "RPNA",
+      "kategori": "Non PTPN"
+    },
+    "PT INL": {
+      "kode_perusahaan": "INL",
+      "nama": "PT INL",
+      "sheet_name": "INL",
+      "holding": "INLA",
+      "kategori": "Non PTPN"
+    },
+    "PT MKSO": {
+      "kode_perusahaan": "SK00",
+      "nama": "MKSO",
+      "sheet_name": "MKSO",
+      "kategori": "Sub Holding",
+      "holding": "SGN"
+    }
+  },
+  "mapping_cell": {
+    "TETAP": {
+      "KARPEL": {
+        "BOD-6": {
+          "usia": {
+            "<26": "G26",
+            "26-30": "H26",
+            "31-40": "I26",
+            "41-50": "J26",
+            "51-53": "K26",
+            "54-60": "L26",
+            ">60": "M26"
+          },
+          "gender": {
+            "P": "C26",
+            "L": "B26"
+          },
+          "pendidikan": {
+            "SD": "B4",
+            "SMP": "C4",
+            "SMA": "D4",
+            "D1": "E4",
+            "D2": "F4",
+            "D3": "G4",
+            "S1": "H4",
+            "S2": "I4",
+            "S3": "J4"
+          },
+          "unit_kerja": {
+            "Kantor Pusat": "B37",
+            "Distrik": "C37",
+            "Kebun": "D37",
+            "Pabrik": "E37",
+            "Penugasan ke Anper (Internal)": "F37",
+            "MBT": "G37",
+            "Cuti DT": "H37"
+          }
+        },
+        "BOD-5": {
+          "usia": {
+            "<26": "G27",
+            "26-30": "H27",
+            "31-40": "I27",
+            "41-50": "J27",
+            "51-53": "K27",
+            "54-60": "L27",
+            ">60": "M27"
+          },
+          "gender": {
+            "P": "C27",
+            "L": "B27"
+          },
+          "pendidikan": {
+            "SD": "B5",
+            "SMP": "C5",
+            "SMA": "D5",
+            "D1": "E5",
+            "D2": "F5",
+            "D3": "G5",
+            "S1": "H5",
+            "S2": "I5",
+            "S3": "J5"
+          },
+          "unit_kerja": {
+            "Kantor Pusat": "B38",
+            "Distrik": "C38",
+            "Kebun": "D38",
+            "Pabrik": "E38",
+            "Penugasan ke Anper (Internal)": "F38",
+            "MBT": "G38",
+            "Cuti DT": "H38"
+          }
+        },
+        "BOD-4": {
+          "usia": {
+            "<26": "G28",
+            "26-30": "H28",
+            "31-40": "I28",
+            "41-50": "J28",
+            "51-53": "K28",
+            "54-60": "L28",
+            ">60": "M28"
+          },
+          "gender": {
+            "P": "C28",
+            "L": "B28"
+          },
+          "pendidikan": {
+            "SD": "B6",
+            "SMP": "C6",
+            "SMA": "D6",
+            "D1": "E6",
+            "D2": "F6",
+            "D3": "G6",
+            "S1": "H6",
+            "S2": "I6",
+            "S3": "J6"
+          },
+          "unit_kerja": {
+            "Kantor Pusat": "B39",
+            "Distrik": "C39",
+            "Kebun": "D39",
+            "Pabrik": "E39",
+            "Penugasan ke Anper (Internal)": "F39",
+            "MBT": "G39",
+            "Cuti DT": "H39"
+          }
+        }
+      },
+      "KARPIM": {
+        "BOD-3": {
+          "usia": {
+            "<26": "G29",
+            "26-30": "H29",
+            "31-40": "I29",
+            "41-50": "J29",
+            "51-53": "K29",
+            "54-60": "L29",
+            ">60": "M29"
+          },
+          "gender": {
+            "P": "C29",
+            "L": "B29"
+          },
+          "pendidikan": {
+            "SD": "B7",
+            "SMP": "C7",
+            "SMA": "D7",
+            "D1": "E7",
+            "D2": "F7",
+            "D3": "G7",
+            "S1": "H7",
+            "S2": "I7",
+            "S3": "J7"
+          },
+          "unit_kerja": {
+            "Kantor Pusat": "B40",
+            "Distrik": "C40",
+            "Kebun": "D40",
+            "Pabrik": "E40",
+            "Penugasan ke Anper (Internal)": "F40",
+            "MBT": "G40",
+            "Cuti DT": "H40"
+          }
+        },
+        "BOD-2": {
+          "usia": {
+            "<26": "G30",
+            "26-30": "H30",
+            "31-40": "I30",
+            "41-50": "J30",
+            "51-53": "K30",
+            "54-60": "L30",
+            ">60": "M30"
+          },
+          "gender": {
+            "P": "C30",
+            "L": "B30"
+          },
+          "pendidikan": {
+            "SD": "B8",
+            "SMP": "C8",
+            "SMA": "D8",
+            "D1": "E8",
+            "D2": "F8",
+            "D3": "G8",
+            "S1": "H8",
+            "S2": "I8",
+            "S3": "J8"
+          },
+          "unit_kerja": {
+            "Kantor Pusat": "B41",
+            "Distrik": "C41",
+            "Kebun": "D41",
+            "Pabrik": "E41",
+            "Penugasan ke Anper (Internal)": "F41",
+            "MBT": "G41",
+            "Cuti DT": "H41"
+          }
+        },
+        "BOD-1": {
+          "usia": {
+            "<26": "G31",
+            "26-30": "H31",
+            "31-40": "I31",
+            "41-50": "J31",
+            "51-53": "K31",
+            "54-60": "L31",
+            ">60": "M31"
+          },
+          "gender": {
+            "P": "C31",
+            "L": "B31"
+          },
+          "pendidikan": {
+            "SD": "B9",
+            "SMP": "C9",
+            "SMA": "D9",
+            "D1": "E9",
+            "D2": "F9",
+            "D3": "G9",
+            "S1": "H9",
+            "S2": "I9",
+            "S3": "J9"
+          },
+          "unit_kerja": {
+            "Kantor Pusat": "B42",
+            "Distrik": "C42",
+            "Kebun": "D42",
+            "Pabrik": "E42",
+            "Penugasan ke Anper (Internal)": "F42",
+            "MBT": "G42",
+            "Cuti DT": "H42"
+          }
+        }
+      }
+    },
+    "TIDAK TETAP": {
+      "KARPIM": {
+        "PKWT": {
+          "gender": {
+            "L": "B60",
+            "P": "C60"
+          },
+          "unit_kerja": {
+            "Kantor Pusat": "B49",
+            "Distrik": "C49",
+            "Kebun": "D49",
+            "Pabrik": "E49"
+          }
+        },
+        "HONORER": {
+          "gender": {
+            "L": "B61",
+            "P": "C61"
+          },
+          "unit_kerja": {
+            "Kantor Pusat": "B50",
+            "Distrik": "C50",
+            "Kebun": "D50",
+            "Pabrik": "E50"
+          }
+        },
+        "MUSIMAN/KAMPANYE": {
+          "gender": {
+            "L": "B62",
+            "P": "C62"
+          },
+          "unit_kerja": {
+            "Kantor Pusat": "B51",
+            "Distrik": "C51",
+            "Kebun": "D51",
+            "Pabrik": "E51"
+          }
+        },
+        "KHL": {
+          "gender": {
+            "L": "B63",
+            "P": "C63"
+          },
+          "unit_kerja": {
+            "Kantor Pusat": "B52",
+            "Distrik": "C52",
+            "Kebun": "D52",
+            "Pabrik": "E52"
+          }
+        },
+        "OUTSOURCING": {
+          "gender": {
+            "L": "B64",
+            "P": "C64"
+          },
+          "unit_kerja": {
+            "Kantor Pusat": "B53",
+            "Distrik": "C53",
+            "Kebun": "D53",
+            "Pabrik": "E53"
+          }
+        }
+      },
+      "KARPEL": {
+        "PKWT": {
+          "gender": {
+            "L": "D60",
+            "P": "E60"
+          },
+          "unit_kerja": {
+            "Kantor Pusat": "F49",
+            "Distrik": "G49",
+            "Kebun": "H49",
+            "Pabrik": "I49"
+          }
+        },
+        "HONORER": {
+          "gender": {
+            "L": "D61",
+            "P": "E61"
+          },
+          "unit_kerja": {
+            "Kantor Pusat": "F50",
+            "Distrik": "G50",
+            "Kebun": "H50",
+            "Pabrik": "I50"
+          }
+        },
+        "MUSIMAN/KAMPANYE": {
+          "gender": {
+            "L": "D62",
+            "P": "E62"
+          },
+          "unit_kerja": {
+            "Kantor Pusat": "F51",
+            "Distrik": "G51",
+            "Kebun": "H51",
+            "Pabrik": "I51"
+          }
+        },
+        "KHL": {
+          "gender": {
+            "L": "D63",
+            "P": "E63"
+          },
+          "unit_kerja": {
+            "Kantor Pusat": "F52",
+            "Distrik": "G52",
+            "Kebun": "H52",
+            "Pabrik": "I52"
+          }
+        },
+        "OUTSOURCING": {
+          "gender": {
+            "L": "D64",
+            "P": "E64"
+          },
+          "unit_kerja": {
+            "Kantor Pusat": "F53",
+            "Distrik": "G53",
+            "Kebun": "H53",
+            "Pabrik": "I53"
+          }
+        }
+      }
+    }
+  },
+  "level_definitions": {
+    "TETAP": [
+      {
+        "kelompok_jabatan": "KARPEL",
+        "level_bod": "BOD-6"
+      },
+      {
+        "kelompok_jabatan": "KARPEL",
+        "level_bod": "BOD-5"
+      },
+      {
+        "kelompok_jabatan": "KARPEL",
+        "level_bod": "BOD-4"
+      },
+      {
+        "kelompok_jabatan": "KARPIM",
+        "level_bod": "BOD-3"
+      },
+      {
+        "kelompok_jabatan": "KARPIM",
+        "level_bod": "BOD-2"
+      },
+      {
+        "kelompok_jabatan": "KARPIM",
+        "level_bod": "BOD-1"
+      }
+    ],
+    "TIDAK TETAP": [
+      {
+        "kelompok_jabatan": "KARPIM",
+        "kategori_jabatan": "PKWT"
+      },
+      {
+        "kelompok_jabatan": "KARPIM",
+        "kategori_jabatan": "HONORER"
+      },
+      {
+        "kelompok_jabatan": "KARPIM",
+        "kategori_jabatan": "MUSIMAN/KAMPANYE"
+      },
+      {
+        "kelompok_jabatan": "KARPIM",
+        "kategori_jabatan": "KHL"
+      },
+      {
+        "kelompok_jabatan": "KARPIM",
+        "kategori_jabatan": "OUTSOURCING"
+      },
+      {
+        "kelompok_jabatan": "KARPEL",
+        "kategori_jabatan": "PKWT"
+      },
+      {
+        "kelompok_jabatan": "KARPEL",
+        "kategori_jabatan": "HONORER"
+      },
+      {
+        "kelompok_jabatan": "KARPEL",
+        "kategori_jabatan": "MUSIMAN/KAMPANYE"
+      },
+      {
+        "kelompok_jabatan": "KARPEL",
+        "kategori_jabatan": "KHL"
+      },
+      {
+        "kelompok_jabatan": "KARPEL",
+        "kategori_jabatan": "OUTSOURCING"
+      }
+    ]
+  }
+}

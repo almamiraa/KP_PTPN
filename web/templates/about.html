@@ -1,0 +1,467 @@
+{% extends "base.html" %}
+
+{% block title %}About - PTPN Unified Converter{% endblock %}
+
+{% block extra_css %}
+<style>
+    .about-header {
+        text-align: center;
+        padding: 60px 0 40px;
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .about-title {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        font-size: 3rem;
+        color: var(--primary-green);
+        margin-bottom: 20px;
+    }
+
+    .about-subtitle {
+        font-size: 1.2rem;
+        color: var(--secondary-green);
+        margin-bottom: 40px;
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 24px;
+        padding: 40px;
+        margin-bottom: 30px;
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .info-card-header {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: var(--primary-green);
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .info-card-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        color: white;
+    }
+
+    .module-detail {
+        background: linear-gradient(135deg, var(--cream-bg) 0%, #ffffff 100%);
+        border-radius: 16px;
+        padding: 25px;
+        margin-bottom: 20px;
+        border-left: 5px solid var(--primary-green);
+    }
+
+    .module-name {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--dark-green);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .module-name i {
+        color: var(--primary-green);
+    }
+
+    .module-description {
+        color: #6c757d;
+        margin-bottom: 15px;
+        line-height: 1.7;
+    }
+
+    .module-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+
+    .meta-item i {
+        color: var(--success-green);
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 15px 0;
+    }
+
+    .feature-list li {
+        padding: 8px 0;
+        display: flex;
+        align-items: start;
+        gap: 10px;
+    }
+
+    .feature-list li i {
+        color: var(--success-green);
+        margin-top: 3px;
+    }
+
+    .tech-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .tech-badge {
+        background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+        color: white;
+        padding: 8px 16px;
+        border-radius: 10px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .tech-badge i {
+        font-size: 1.1rem;
+    }
+
+    .contact-section {
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+        border-radius: 24px;
+        padding: 50px;
+        color: white;
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    .contact-section h3 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .contact-info {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+
+    .contact-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .contact-item i {
+        font-size: 2rem;
+        color: var(--cream-accent);
+    }
+
+    .contact-item span {
+        font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+        .about-title {
+            font-size: 2rem;
+        }
+
+        .info-card {
+            padding: 25px;
+        }
+
+        .module-meta {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .tech-stack {
+            justify-content: center;
+        }
+
+        .contact-info {
+            flex-direction: column;
+            gap: 20px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="about-header">
+    <h1 class="about-title">
+        <i class="fas fa-info-circle me-3"></i>
+        Tentang Sistem
+    </h1>
+    <p class="about-subtitle">
+        PTPN Converter - Sistem Konversi Data Terintegrasi
+    </p>
+</div>
+
+<!-- System Overview -->
+<div class="info-card">
+    <div class="info-card-header">
+        <div class="info-card-icon">
+            <i class="fas fa-leaf"></i>
+        </div>
+        <div>Tentang Aplikasi</div>
+    </div>
+    <p style="color: #6c757d; line-height: 1.8; font-size: 1.05rem;">
+        PTPN Unified Converter adalah sistem terintegrasi yang dirancang untuk mengkonversi data Excel 
+        ke format database terstruktur. Sistem ini mendukung dua modul utama: <strong>Demografi SDM</strong> 
+        untuk pengelolaan data karyawan dan <strong>Konsolidasi Biaya</strong> untuk analisis biaya operasional.
+    </p>
+    <p style="color: #6c757d; line-height: 1.8; font-size: 1.05rem; margin-top: 15px;">
+        Dibangun dengan teknologi modern dan menggunakan arsitektur multi-database untuk memastikan 
+        skalabilitas, keamanan, dan performa optimal dalam pengelolaan data skala besar.
+    </p>
+</div>
+
+<!-- Module Details -->
+<div class="info-card">
+    <div class="info-card-header">
+        <div class="info-card-icon">
+            <i class="fas fa-cubes"></i>
+        </div>
+        <div>Modul Aplikasi</div>
+    </div>
+
+    <!-- Demografi Module -->
+    <div class="module-detail">
+        <div class="module-name">
+            <i class="fas fa-users"></i>
+            Demografi SDM
+        </div>
+        <p class="module-description">
+            Modul konversi data demografi karyawan dari format Excel ke database terstruktur. 
+            Mendukung analisis multi-dimensional dengan pemisahan kategori perusahaan.
+        </p>
+        <div class="module-meta">
+            <div class="meta-item">
+                <i class="fas fa-database"></i>
+                <span>Database: <strong>DBdemografi</strong></span>
+            </div>
+            <div class="meta-item">
+                <i class="fas fa-table"></i>
+                <span>Tables: <strong>7 tables</strong></span>
+            </div>
+            <div class="meta-item">
+                <i class="fas fa-chart-pie"></i>
+                <span>Dimensi: <strong>5 dimensi</strong></span>
+            </div>
+        </div>
+        <ul class="feature-list">
+            <li>
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Multi-dimensional Analysis:</strong> Gender, Pendidikan, Usia, Unit Kerja, Tren</span>
+            </li>
+            <li>
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Company Categorization:</strong> Sub Holding PTPN vs Non PTPN</span>
+            </li>
+            <li>
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Monthly Dashboard:</strong> Visualisasi data per periode dengan grafik interaktif</span>
+            </li>
+            <li>
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Trend Calculation:</strong> Analisis tren karyawan tetap vs tidak tetap</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Cost Module -->
+    <div class="module-detail">
+        <div class="module-name">
+            <i class="fas fa-calculator"></i>
+            Konsolidasi Biaya
+        </div>
+        <p class="module-description">
+            Modul konversi data biaya operasional dengan dukungan analisis REAL vs RKAP untuk 
+            monitoring pencapaian target biaya per periode.
+        </p>
+        <div class="module-meta">
+            <div class="meta-item">
+                <i class="fas fa-database"></i>
+                <span>Database: <strong>DBcost</strong></span>
+            </div>
+            <div class="meta-item">
+                <i class="fas fa-table"></i>
+                <span>Tables: <strong>3 tables</strong></span>
+            </div>
+            <div class="meta-item">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>Metrics: <strong>REAL, RKAP, s.d.</strong></span>
+            </div>
+        </div>
+        <ul class="feature-list">
+            <li>
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Payment Type Analysis:</strong> Breakdown biaya per tipe pembayaran</span>
+            </li>
+            <li>
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Holding Comparison:</strong> Analisis biaya per holding company</span>
+            </li>
+            <li>
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Achievement Tracking:</strong> Monitor realisasi vs target (REAL vs RKAP)</span>
+            </li>
+            <li>
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Period Comparison:</strong> Perbandingan biaya bulanan dan kumulatif</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Technology Stack -->
+<div class="info-card">
+    <div class="info-card-header">
+        <div class="info-card-icon">
+            <i class="fas fa-code"></i>
+        </div>
+        <div>Technology Stack</div>
+    </div>
+    <p style="color: #6c757d; margin-bottom: 20px;">
+        Aplikasi ini dibangun menggunakan teknologi modern dan terpercaya:
+    </p>
+    <div class="tech-stack">
+        <div class="tech-badge">
+            <i class="fab fa-python"></i>
+            Python 3.x
+        </div>
+        <div class="tech-badge">
+            <i class="fas fa-flask"></i>
+            Flask Framework
+        </div>
+        <div class="tech-badge">
+            <i class="fas fa-database"></i>
+            SQL Server
+        </div>
+        <div class="tech-badge">
+            <i class="fas fa-file-excel"></i>
+            Openpyxl
+        </div>
+        <div class="tech-badge">
+            <i class="fas fa-table"></i>
+            Pandas
+        </div>
+        <div class="tech-badge">
+            <i class="fab fa-bootstrap"></i>
+            Bootstrap 5
+        </div>
+        <div class="tech-badge">
+            <i class="fas fa-chart-bar"></i>
+            Chart.js
+        </div>
+        <div class="tech-badge">
+            <i class="fas fa-shield-alt"></i>
+            Windows Auth
+        </div>
+    </div>
+</div>
+
+<!-- Key Features -->
+<div class="info-card">
+    <div class="info-card-header">
+        <div class="info-card-icon">
+            <i class="fas fa-star"></i>
+        </div>
+        <div>Fitur Unggulan</div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <div style="padding: 20px; background: var(--cream-bg); border-radius: 12px;">
+                <h6 style="color: var(--primary-green); font-weight: 600; margin-bottom: 10px;">
+                    <i class="fas fa-database me-2"></i>
+                    Database-Only Storage
+                </h6>
+                <p style="color: #6c757d; margin: 0; font-size: 0.95rem;">
+                    Semua file disimpan langsung ke database (VARBINARY), tidak ada local storage. 
+                    File otomatis terhapus setelah proses selesai.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div style="padding: 20px; background: var(--cream-bg); border-radius: 12px;">
+                <h6 style="color: var(--primary-green); font-weight: 600; margin-bottom: 10px;">
+                    <i class="fas fa-bolt me-2"></i>
+                    Auto Validation
+                </h6>
+                <p style="color: #6c757d; margin: 0; font-size: 0.95rem;">
+                    Validasi otomatis untuk file, periode, dan format data. Error handling 
+                    komprehensif dengan pesan yang jelas.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div style="padding: 20px; background: var(--cream-bg); border-radius: 12px;">
+                <h6 style="color: var(--primary-green); font-weight: 600; margin-bottom: 10px;">
+                    <i class="fas fa-chart-line me-2"></i>
+                    Visual Analytics
+                </h6>
+                <p style="color: #6c757d; margin: 0; font-size: 0.95rem;">
+                    Dashboard interaktif dengan Chart.js untuk visualisasi data real-time 
+                    dan analisis tren.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div style="padding: 20px; background: var(--cream-bg); border-radius: 12px;">
+                <h6 style="color: var(--primary-green); font-weight: 600; margin-bottom: 10px;">
+                    <i class="fas fa-history me-2"></i>
+                    Complete History
+                </h6>
+                <p style="color: #6c757d; margin: 0; font-size: 0.95rem;">
+                    Tracking lengkap semua konversi dengan metadata detail: timestamp, 
+                    status, durasi, dan error logs.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

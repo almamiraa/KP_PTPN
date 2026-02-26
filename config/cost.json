@@ -1,0 +1,334 @@
+{
+  "perusahaan": {
+    "HOLDING": {
+      "kode_perusahaan": "CHOL",
+      "nama": "HOLDING",
+      "sheet_name": "1. HOLDING",
+      "holding": "PTPN III"
+    },
+    "PISMK": {
+      "kode_perusahaan": "CP15",
+      "nama": "PISMK",
+      "sheet_name": "1.A. PISMK",
+      "holding": "PTPN III"
+    },
+    "REG 1 PALM CO": {
+      "kode_perusahaan": "1R00",
+      "nama": "REG 1 PALM CO",
+      "sheet_name": "REKAP REG 1",
+      "holding": "PTPN IV"
+    },
+    "REG 2 PALM CO": {
+      "kode_perusahaan": "2R00",
+      "nama": "REG 2 PALM CO",
+      "sheet_name": "REKAP REG 2",
+      "holding": "PTPN IV"
+    },
+    "REG 3 PALM CO": {
+      "kode_perusahaan": "3R00",
+      "nama": "REG 3 PALM CO",
+      "sheet_name": "REG 3 PALM CO",
+      "holding": "PTPN IV"
+    },
+    "REG 4 PALM CO": {
+      "kode_perusahaan": "4R00",
+      "nama": "REG 4 PALM CO",
+      "sheet_name": "REG 4 PALM CO",
+      "holding": "PTPN IV"
+    },
+    "REG 5 PALM CO": {
+      "kode_perusahaan": "5R00",
+      "nama": "REG 5 PALM CO",
+      "sheet_name": "REG 5 PALM CO",
+      "holding": "PTPN IV"
+    },
+    "REG 6 PALM CO": {
+      "kode_perusahaan": "6R00",
+      "nama": "REG 6 PALM CO",
+      "sheet_name": "REG 6 PALM CO",
+      "holding": "PTPN IV"
+    },
+    "REG 7 PALM CO": {
+      "kode_perusahaan": "7R00",
+      "nama": "REG 7 PALM CO",
+      "sheet_name": "REG 7 PALM CO",
+      "holding": "PTPN IV"
+    },
+    "HO SUPP CO": {
+      "kode_perusahaan": "HA00",
+      "nama": "HO SUPP CO",
+      "sheet_name": "HO SUPP CO",
+      "holding": "PTPN I"
+    },
+    "REG 1 SUPP CO": {
+      "kode_perusahaan": "2S00",
+      "nama": "REG 1 SUPP CO",
+      "sheet_name": "REG 1 SUPP CO",
+      "holding": "PTPN I"
+    },
+    "REG 2 SUPP CO": {
+      "kode_perusahaan": "4S00",
+      "nama": "REG 2 SUPP CO",
+      "sheet_name": "REG 2 SUPP CO",
+      "holding": "PTPN I"
+    },
+    "REG 3 SUPP CO": {
+      "kode_perusahaan": "5S00",
+      "nama": "REG 3 SUPP CO",
+      "sheet_name": "REG 3 SUPP CO",
+      "holding": "PTPN I"
+    },
+    "REG 4 SUPP CO": {
+      "kode_perusahaan": "6S00",
+      "nama": "REG 4 SUPP CO",
+      "sheet_name": "REG 4 SUPP CO",
+      "holding": "PTPN I"
+    },
+    "REG 5 SUPP CO": {
+      "kode_perusahaan": "7S00",
+      "nama": "REG 5 SUPP CO",
+      "sheet_name": "REG 5 SUPP CO",
+      "holding": "PTPN I"
+    },
+    "REG 6 SUPP CO": {
+      "kode_perusahaan": "1S00",
+      "nama": "REG 6 SUPP CO",
+      "sheet_name": "REG 6 SUPP CO",
+      "holding": "PTPN I"
+    },
+    "REG 7 SUPP CO": {
+      "kode_perusahaan": "3S00",
+      "nama": "REG 7 SUPP CO",
+      "sheet_name": "REG 7 SUPP CO",
+      "holding": "PTPN I"
+    },
+    "REG 8 SUPP CO": {
+      "kode_perusahaan": "8S00",
+      "nama": "REG 8 SUPP CO",
+      "sheet_name": "REG 8 SUPP CO",
+      "holding": "PTPN I"
+    },
+    "PT SUGAR CO": {
+      "kode_perusahaan": "S000",
+      "nama": "PT SUGAR CO",
+      "sheet_name": "4. PT SUGAR CO",
+      "holding": "SGN"  
+    },
+    "HO PALM CO": {
+      "kode_perusahaan": "PHO0",
+      "nama": "HO PALM CO",
+      "sheet_name": "HO PALM CO",
+      "holding": "PTPN IV"
+    }
+  },
+  "row_mapping": {
+    "14": {
+      "payment_type": "CASH",
+      "cost_description": "Biaya Dewan Komisaris"
+    },
+    "16": {
+      "payment_type": "CASH",
+      "cost_description": "Biaya Direksi"
+    },
+    "17": {
+      "payment_type": "CASH",
+      "cost_description": "Gaji dan Tunjangan Karyawan Tetap (Exc: Direksi & Komisaris)"
+    },
+    "18": {
+      "payment_type": "CASH",
+      "cost_description": "Gaji Karyawan PKWT (Perjanjian Kerja untuk Waktu Tertentu) dan Outsourcing"
+    },
+    "19": {
+      "payment_type": "CASH",
+      "cost_description": "Imbalan & Insentif Kerja Lainnya (Tunjangan)"
+    },
+    "20": {
+      "payment_type": "CASH",
+      "cost_description": "Honorarium /Upah"
+    },
+    "21": {
+      "payment_type": "CASH",
+      "cost_description": "Lembur"
+    },
+    "22": {
+      "payment_type": "CASH",
+      "cost_description": "Biaya Pengembangan SDM"
+    },
+    "23": {
+      "payment_type": "CASH",
+      "cost_description": "Biaya Cuti Tahunan"
+    },
+    "24": {
+      "payment_type": "CASH",
+      "cost_description": "Biaya Cuti Panjang"
+    },
+    "25": {
+      "payment_type": "CASH",
+      "cost_description": "Premi"
+    },
+    "26": {
+      "payment_type": "CASH",
+      "cost_description": "Biaya Perjalanan Dinas"
+    },
+    "27": {
+      "payment_type": "CASH",
+      "cost_description": "Jasa Produksi/Bonus"
+    },
+    "28": {
+      "payment_type": "CASH",
+      "cost_description": "Tantiem Direksi dan Komisaris"
+    },
+    "29": {
+      "payment_type": "CASH",
+      "cost_description": "Tunjangan Hari Raya (THR)"
+    },
+    "30": {
+      "payment_type": "CASH",
+      "cost_description": "Biaya Pindah"
+    },
+    "31": {
+      "payment_type": "CASH",
+      "cost_description": "Biaya Kesehatan Karyawan Aktif"
+    },
+    "32": {
+      "payment_type": "CASH",
+      "cost_description": "Biaya Pakaian Kerja"
+    },
+    "33": {
+      "payment_type": "CASH",
+      "cost_description": "Biaya Perbantuan ke Unit Lain (Detasering)"
+    },
+    "34": {
+      "payment_type": "CASH",
+      "cost_description": "Biaya Tunjangan PPh 21"
+    },
+    "37": {
+      "payment_type": "CASH",
+      "cost_description": "Iuran Dapenbun Beban Perusahaan"
+    },
+    "38": {
+      "payment_type": "CASH",
+      "cost_description": "Iuran Dapenbun Beban Karyawan"
+    },
+    "40": {
+      "payment_type": "CASH",
+      "cost_description": "Iuran DPLK Beban Perusahaan"
+    },
+    "41": {
+      "payment_type": "CASH",
+      "cost_description": "Iuran DPLK Beban Karyawan"
+    },
+    "44": {
+      "payment_type": "CASH",
+      "cost_description": "Iuran Jaminan Kematian (JK)"
+    },
+    "45": {
+      "payment_type": "CASH",
+      "cost_description": "Iuran Jaminan Kecelakaan Kerja (JKK)"
+    },
+    "46": {
+      "payment_type": "CASH",
+      "cost_description": "Iuran Jaminan hari Tua JHT"
+    },
+    "47": {
+      "payment_type": "CASH",
+      "cost_description": "Iuran Jaminan Pensiun (JP)"
+    },
+    "49": {
+      "payment_type": "CASH",
+      "cost_description": "Iuran BPJS Kesehatan Beban Perusahaan"
+    },
+    "50": {
+      "payment_type": "CASH",
+      "cost_description": "Iuran BPJS Kesehatan Beban Karyawan"
+    },
+    "52": {
+      "payment_type": "CASH",
+      "cost_description": "Asuransi Karyawan (Misal : Accident plus)"
+    },
+    "53": {
+      "payment_type": "CASH",
+      "cost_description": "Santunan Kemalangan"
+    },
+    "54": {
+      "payment_type": "CASH",
+      "cost_description": "Santunan Hari Tua"
+    },
+    "55": {
+      "payment_type": "CASH",
+      "cost_description": "Biaya Pengosongan Rumah"
+    },
+    "56": {
+      "payment_type": "CASH",
+      "cost_description": "Biaya Penghargaan Masa Kerja"
+    },
+    "57": {
+      "payment_type": "CASH",
+      "cost_description": "Biaya Pensiun / Pesangon / Kesehatan Pensiun"
+    },
+    "74": {
+      "payment_type": "NON CASH",
+      "cost_description": "Jasa Produksi/Bonus"
+    },
+    "75": {
+      "payment_type": "NON CASH",
+      "cost_description": "Tantiem Direksi dan Komisaris"
+    },
+    "78": {
+      "payment_type": "NON CASH",
+      "cost_description": "Iuran Dapenbun Beban Karyawan"
+    },
+    "80": {
+      "payment_type": "NON CASH",
+      "cost_description": "Iuran DPLK Beban Karyawan"
+    },
+    "82": {
+      "payment_type": "NON CASH",
+      "cost_description": "Iuran BPJS Ketenagakerjaan Beban Karyawan"
+    },
+    "84": {
+      "payment_type": "NON CASH",
+      "cost_description": "Iuran BPJS Kesehatan Beban Karyawan"
+    },
+    "86": {
+      "payment_type": "NON CASH",
+      "cost_description": "Pengosongan Rumah Dinas"
+    },
+    "87": {
+      "payment_type": "NON CASH",
+      "cost_description": "Santunan Hari Tua"
+    },
+    "88": {
+      "payment_type": "NON CASH",
+      "cost_description": "Uang Cuti Panjang"
+    },
+    "89": {
+      "payment_type": "NON CASH",
+      "cost_description": "Tunjangan Kematian"
+    },
+    "90": {
+      "payment_type": "NON CASH",
+      "cost_description": "Pesangon"
+    },
+    "91": {
+      "payment_type": "NON CASH",
+      "cost_description": "Harga MK 25-30-35"
+    },
+    "92": {
+      "payment_type": "NON CASH",
+      "cost_description": "Kesehatan Pensiun"
+    },
+    "93": {
+      "payment_type": "NON CASH",
+      "cost_description": "Iuran Pensiun Dapenbum"
+    },
+    "94": {
+      "payment_type": "NON CASH",
+      "cost_description": "Masa Bebas Tugas"
+    },
+    "95": {
+      "payment_type": "NON CASH",
+      "cost_description": "Cadangan Imbalan Kerja"
+    }
+  }
+}

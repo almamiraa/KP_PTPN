@@ -1,0 +1,932 @@
+{% extends "demografi/base.html" %}
+
+{% block title %}Dashboard Monitoring - Demografi SDM{% endblock %}
+
+{% block extra_css %}
+<style>
+  .dashboard-container {
+    width: 95vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -47.5vw;
+    margin-right: -47.5vw;
+  }
+
+  /* Filter Card */
+  .filter-card {
+    background: linear-gradient(135deg, #ffffff 0%, var(--cream-bg) 100%);
+    border: 2px solid var(--sage-green);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 30px;
+    transition: all 0.3s;
+  }
+
+  .filter-card:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-green);
+  }
+
+  .filter-title {
+    font-family: 'Poppins', sans-serif;
+    color: var(--primary-green);
+    font-weight: 700;
+    white-space: nowrap;
+    margin: 0;
+  }
+
+  .filter-title i {
+    color: var(--success-green);
+  }
+
+  .form-select,
+  .form-control {
+    border: 2px solid var(--sage-green);
+    border-radius: 12px;
+    transition: all 0.3s;
+  }
+
+  .form-select:focus,
+  .form-control:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(67, 104, 80, 0.1);
+  }
+
+  /* Category Sections */
+  .category-section {
+    margin-bottom: 50px;
+    padding: 35px;
+    background: linear-gradient(135deg, var(--cream-bg) 0%, #f8f9fa 100%);
+    border-radius: 24px;
+    border: 2px solid var(--sage-green);
+  }
+
+  .category-header {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+    color: white;
+    padding: 25px 35px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(67, 104, 80, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .category-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  }
+
+  .category-header h3 {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+  }
+
+  .category-header.non-ptpn {
+    background: linear-gradient(135deg, var(--secondary-green) 0%, #6ba3c0 100%);
+    box-shadow: 0 10px 30px rgba(81, 130, 155, 0.3);
+  }
+
+  /* Highlight Boxes - Green Variants */
+  .highlight-box {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+    color: white;
+    border-radius: 18px;
+    padding: 35px 25px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(67, 104, 80, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .highlight-box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  }
+
+  .highlight-box:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(67, 104, 80, 0.4);
+  }
+
+  .highlight-box h2 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin: 10px 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .highlight-box p {
+    margin: 0;
+    font-size: 1.1rem;
+    opacity: 0.95;
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+  }
+
+  .highlight-box i {
+    position: relative;
+    z-index: 1;
+  }
+
+  .highlight-box.variant-1 {
+    background: linear-gradient(135deg, var(--success-green) 0%, #6bc19b 100%);
+  }
+
+  .highlight-box.variant-2 {
+    background: linear-gradient(135deg, var(--secondary-green) 0%, #6ba3c0 100%);
+  }
+
+  .highlight-box.variant-3 {
+    background: linear-gradient(135deg, var(--sage-green) 0%, #c5d4b8 100%);
+    color: var(--dark-green);
+  }
+
+  /* Chart Sections */
+  .chart-section {
+    background: white;
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 30px;
+    border: 2px solid var(--cream-bg);
+    transition: all 0.3s;
+  }
+
+  .chart-section:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--sage-green);
+  }
+
+  .chart-section h4 {
+    font-family: 'Poppins', sans-serif;
+    color: var(--primary-green);
+    font-weight: 700;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid var(--cream-bg);
+  }
+
+  .chart-wrapper {
+    position: relative;
+    height: 400px;
+    margin-bottom: 20px;
+  }
+
+  .chart-wrapper.tall {
+    height: 500px;
+  }
+
+  .section-subtitle {
+    color: var(--primary-green);
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding: 8px 15px;
+    background: linear-gradient(135deg, var(--cream-bg) 0%, #ffffff 100%);
+    border-radius: 10px;
+    border-left: 4px solid var(--success-green);
+  }
+
+  /* Modal */
+  .modal-content {
+    border-radius: 20px;
+    border: none;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .modal-header-danger {
+    background: linear-gradient(135deg, var(--danger) 0%, #ff6b6b 100%);
+    color: white;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .modal-icon {
+    color: var(--danger);
+    opacity: 0.3;
+  }
+
+  /* No Data Message */
+  .no-data-message {
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .no-data-icon-wrapper {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, var(--cream-bg), #ffffff);
+    border-radius: 50%;
+    border: 3px solid var(--sage-green);
+    margin: 0 auto 20px;
+  }
+
+  .no-data-icon-wrapper i {
+    color: var(--sage-green);
+  }
+
+  /* Buttons */
+  .btn-filter {
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+
+  .btn-filter:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(67, 104, 80, 0.3);
+    color: white;
+  }
+
+  .btn-add {
+    background: linear-gradient(135deg, var(--secondary-green), #6ba3c0);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+
+ .btn-add:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(81, 130, 155, 0.3);
+    color: white;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+  
+  <!-- Filter Section -->
+  <div class="filter-card">
+    <div class="row align-items-center">
+      <div class="col-md-2">
+        <div class="d-flex align-items-center">
+          <i class="fas fa-calendar-alt fs-1 me-3" style="color: var(--success-green);"></i>
+          <div>
+            <h4 class="filter-title">Dashboard</h4>
+            <h4 class="filter-title">Monitoring</h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-10">
+        <form method="GET" action="{{ url_for('demografi.monthly_dashboard') }}" class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label small fw-bold mb-1" style="color: var(--primary-green);">Bulan</label>
+            <select name="month" class="form-select" required>
+              <option value="">-- Pilih Bulan --</option>
+              {% for m in range(1, 13) %}
+              <option value="{{ m }}" {% if m == selected_month %}selected{% endif %}>
+                {{ ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][m-1] }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <div class="col-md-3">
+            <label class="form-label small fw-bold mb-1" style="color: var(--primary-green);">Tahun</label>
+            <select name="year" class="form-select" required>
+              <option value="">-- Pilih Tahun --</option>
+              {% for y in range(current_year - 5, current_year + 1) %}
+              <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <div class="col-md-3 d-flex align-items-end">
+            <button type="submit" class="btn btn-filter w-100">
+              <i class="fas fa-search me-2"></i>Tampilkan Data
+            </button>
+          </div>
+          
+            <div class="col-md-3 d-flex align-items-end">
+               <a href="{{ url_for('demografi.history') }}" class="btn btn-add w-100">
+              <i class="fas fa-history me-1"></i>Riwayat Upload
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Pop Up - No Data -->
+  <div class="modal fade" id="noDataModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header modal-header-danger py-3 border-0">
+          <h5 class="modal-title fw-bold">
+            <i class="fas fa-exclamation-circle me-2"></i>Data Tidak Ditemukan
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        
+        <div class="modal-body text-center py-5">
+          <div class="mb-4">
+            <i class="fas fa-folder-open fa-4x modal-icon"></i>
+          </div>
+          <h5 class="fw-bold mb-2" style="color: var(--primary-green);">Oops! Tidak Ada Data.</h5>
+          <p id="noDataMessage" class="text-muted mb-0 px-3"></p>
+        </div>
+        <div class="modal-footer border-0 justify-content-center pb-4">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if has_data %}
+  
+  <!-- Highlight Cards - Total Stats -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="highlight-box">
+        <i class="fas fa-users fa-2x mb-2"></i>
+        <h2 id="totalKaryawan">0</h2>
+        <p>Total Karyawan</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="highlight-box variant-3">
+        <i class="fas fa-user-check fa-2x mb-2"></i>
+        <h2 id="totalTetap">0</h2>
+        <p>Karyawan Tetap</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="highlight-box variant-1">
+        <i class="fas fa-user-clock fa-2x mb-2"></i>
+        <h2 id="totalTidakTetap">0</h2>
+        <p>Karyawan Tidak Tetap</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="highlight-box variant-2">
+        <i class="fas fa-chart-pie fa-2x mb-2"></i>
+        <h2 id="rasioTetap">0%</h2>
+        <p>Rasio Tetap vs Tidak Tetap</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: SUB HOLDING PTPN -->
+  <div class="category-section">
+    <div class="category-header">
+      <h3 class="fw-bold">
+        <i class="fas fa-building me-2"></i>
+        Visualisasi Data Sub Holding PTPN
+      </h3>
+    </div>
+
+    <!-- Usia & Pendidikan Charts -->
+    <div class="row g-4 mb-4">
+      <div class="col-xl-6">
+        <div class="chart-section h-100">
+          <h4>
+            <i class="fas fa-birthday-cake me-2" style="color: var(--success-green);"></i>
+            Distribusi Usia (Karyawan Tetap)
+          </h4>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="section-subtitle">BOD 4-6</div>
+              <div class="chart-wrapper" style="height: 250px;">
+                <canvas id="usiaBod46Chart_sub"></canvas>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="section-subtitle">BOD 1-3</div>
+              <div class="chart-wrapper" style="height: 250px;">
+                <canvas id="usiaBod13Chart_sub"></canvas>
+              </div>
+            </div>
+            <div class="col-12 mt-3 pt-3 border-top">
+              <div class="section-subtitle text-center fw-bold">Total Seluruh Level</div>
+              <div class="chart-wrapper" style="height: 250px;">
+                <canvas id="usiaTotalChart_sub"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-6">
+        <div class="chart-section h-100">
+          <h4>
+            <i class="fas fa-graduation-cap me-2" style="color: var(--secondary-green);"></i>
+            Tingkat Pendidikan (Karyawan Tetap)
+          </h4>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="section-subtitle">BOD 4-6</div>
+              <div class="chart-wrapper" style="height: 250px;">
+                <canvas id="pendidikanBod46Chart_sub"></canvas>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="section-subtitle">BOD 1-3</div>
+              <div class="chart-wrapper" style="height: 250px;">
+                <canvas id="pendidikanBod13Chart_sub"></canvas>
+              </div>
+            </div>
+            <div class="col-12 mt-3 pt-3 border-top">
+              <div class="section-subtitle text-center fw-bold">Total Seluruh Level</div>
+              <div class="chart-wrapper" style="height: 250px;">
+                <canvas id="pendidikanTotalChart_sub"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gender Chart -->
+    <div class="chart-section mb-4">
+      <h4>
+        <i class="fas fa-venus-mars me-2" style="color: var(--sage-green);"></i>
+        Visualisasi Data Gender
+      </h4>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="section-subtitle text-center">Karyawan Tetap</div>
+          <div class="chart-wrapper" style="height: 250px;">
+            <canvas id="genderTetapChart_sub"></canvas>
+          </div>
+        </div>
+        <div class="col-md-4 border-start border-end">
+          <div class="section-subtitle text-center">Karyawan Tidak Tetap</div>
+          <div class="chart-wrapper" style="height: 250px;">
+            <canvas id="genderTidakTetapChart_sub"></canvas>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="section-subtitle text-center fw-bold">Total Semua Karyawan</div>
+          <div class="chart-wrapper" style="height: 250px;">
+            <canvas id="genderTotalChart_sub"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit Kerja Chart -->
+    <div class="chart-section mb-4">
+      <h4>
+        <i class="fas fa-building me-2" style="color: var(--primary-green);"></i>
+        Visualisasi Unit Kerja
+      </h4>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="section-subtitle">Karyawan Tetap</div>
+          <div class="chart-wrapper tall">
+            <canvas id="unitKerjaTetapChart_sub"></canvas>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="section-subtitle">Karyawan Tidak Tetap</div>
+          <div class="chart-wrapper tall">
+            <canvas id="unitKerjaTidakTetapChart_sub"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tren Chart -->
+    <div class="chart-section mb-4">
+      <h4>
+        <i class="fas fa-chart-line me-2" style="color: var(--success-green);"></i>
+        Status Karyawan (Tren)
+      </h4>
+      <div class="chart-wrapper" style="height: 300px;">
+        <canvas id="trenChart_sub"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: NON PTPN -->
+  <div class="category-section">
+    <div class="category-header non-ptpn">
+      <h3 class="fw-bold">
+        <i class="fas fa-industry me-2"></i>
+        Visualisasi Data Non PTPN
+      </h3>
+    </div>
+
+    <!-- Usia & Pendidikan Charts -->
+    <div class="row g-4 mb-4">
+      <div class="col-xl-6">
+        <div class="chart-section h-100">
+          <h4>
+            <i class="fas fa-birthday-cake me-2" style="color: var(--success-green);"></i>
+            Distribusi Usia (Karyawan Tetap)
+          </h4>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="section-subtitle">BOD 4-6</div>
+              <div class="chart-wrapper" style="height: 250px;">
+                <canvas id="usiaBod46Chart_non"></canvas>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="section-subtitle">BOD 1-3</div>
+              <div class="chart-wrapper" style="height: 250px;">
+                <canvas id="usiaBod13Chart_non"></canvas>
+              </div>
+            </div>
+            <div class="col-12 mt-3 pt-3 border-top">
+              <div class="section-subtitle text-center fw-bold">Total Seluruh Level</div>
+              <div class="chart-wrapper" style="height: 250px;">
+                <canvas id="usiaTotalChart_non"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-6">
+        <div class="chart-section h-100">
+          <h4>
+            <i class="fas fa-graduation-cap me-2" style="color: var(--secondary-green);"></i>
+            Tingkat Pendidikan (Karyawan Tetap)
+          </h4>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="section-subtitle">BOD 4-6</div>
+              <div class="chart-wrapper" style="height: 250px;">
+                <canvas id="pendidikanBod46Chart_non"></canvas>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="section-subtitle">BOD 1-3</div>
+              <div class="chart-wrapper" style="height: 250px;">
+                <canvas id="pendidikanBod13Chart_non"></canvas>
+              </div>
+            </div>
+            <div class="col-12 mt-3 pt-3 border-top">
+              <div class="section-subtitle text-center fw-bold">Total Seluruh Level</div>
+              <div class="chart-wrapper" style="height: 250px;">
+                <canvas id="pendidikanTotalChart_non"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gender Chart -->
+    <div class="chart-section mb-4">
+      <h4>
+        <i class="fas fa-venus-mars me-2" style="color: var(--sage-green);"></i>
+        Visualisasi Data Gender
+      </h4>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="section-subtitle text-center">Karyawan Tetap</div>
+          <div class="chart-wrapper" style="height: 250px;">
+            <canvas id="genderTetapChart_non"></canvas>
+          </div>
+        </div>
+        <div class="col-md-4 border-start border-end">
+          <div class="section-subtitle text-center">Karyawan Tidak Tetap</div>
+          <div class="chart-wrapper" style="height: 250px;">
+            <canvas id="genderTidakTetapChart_non"></canvas>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="section-subtitle text-center fw-bold">Total Semua Karyawan</div>
+          <div class="chart-wrapper" style="height: 250px;">
+            <canvas id="genderTotalChart_non"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit Kerja Chart -->
+    <div class="chart-section mb-4">
+      <h4>
+        <i class="fas fa-building me-2" style="color: var(--primary-green);"></i>
+        Visualisasi Unit Kerja
+      </h4>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="section-subtitle">Karyawan Tetap</div>
+          <div class="chart-wrapper tall">
+            <canvas id="unitKerjaTetapChart_non"></canvas>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="section-subtitle">Karyawan Tidak Tetap</div>
+          <div class="chart-wrapper tall">
+            <canvas id="unitKerjaTidakTetapChart_non"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tren Chart -->
+    <div class="chart-section mb-4">
+      <h4>
+        <i class="fas fa-chart-line me-2" style="color: var(--success-green);"></i>
+        Status Karyawan (Tren)
+      </h4>
+      <div class="chart-wrapper" style="height: 300px;">
+        <canvas id="trenChart_non"></canvas>
+      </div>
+    </div>
+  </div>
+
+  {% else %}
+  <!-- Empty State -->
+  <div class="chart-section shadow-sm border-0 d-flex align-items-center justify-content-center" style="min-height: 400px; border-radius: 20px;">
+    <div class="no-data-message text-center p-5">
+      <div class="no-data-icon-wrapper d-flex align-items-center justify-content-center">
+        <i class="fas fa-database fa-3x"></i>
+      </div>
+      <h4 class="fw-bold mb-2" style="color: var(--primary-green);">Data Tidak Ditemukan</h4>
+      <p class="text-muted mx-auto" style="max-width: 320px;">
+        Silakan pilih <strong>Bulan & Tahun</strong> pada filter di atas, lalu klik tombol Tampilkan Data
+      </p>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+{% if has_data %}
+<script>
+  fetch("{{ url_for('demografi.api_monthly_data', year=selected_year, month=selected_month) }}")
+    .then(response => response.json())
+    .then(data => {
+      console.log('Monthly data:', data);
+      
+      if (data.error) {
+        alert('Error: ' + data.message);
+        return;
+      }
+      
+      if (data.has_data === false) {
+        document.getElementById("noDataMessage").textContent = data.message || "Data tidak tersedia untuk periode ini.";
+        const modal = new bootstrap.Modal(document.getElementById("noDataModal"));
+        modal.show();
+        return;
+      }
+      
+      // Update TOTAL highlight cards
+      const totalKaryawan = data.sub_holding.summary.total_karyawan + data.non_ptpn.summary.total_karyawan;
+      const totalTetap = data.sub_holding.summary.total_tetap + data.non_ptpn.summary.total_tetap;
+      const totalTidakTetap = data.sub_holding.summary.total_tidak_tetap + data.non_ptpn.summary.total_tidak_tetap;
+      const rasioTetap = totalKaryawan > 0 ? ((totalTetap / totalKaryawan) * 100).toFixed(1) : 0;
+      
+      document.getElementById('totalKaryawan').textContent = totalKaryawan.toLocaleString();
+      document.getElementById('totalTetap').textContent = totalTetap.toLocaleString();
+      document.getElementById('totalTidakTetap').textContent = totalTidakTetap.toLocaleString();
+      document.getElementById('rasioTetap').textContent = rasioTetap + '%';
+      
+      // Green color palette
+      const colors = {
+        primary: '#436850',
+        secondary: '#51829b',
+        sage: '#adbc9f',
+        success: '#8adab2',
+        accent1: '#6bc19b',
+        accent2: '#6ba3c0',
+        accent3: '#c5d4b8',
+        dark: '#12372a'
+      };
+      
+      function createChartIfData(elementId, type, chartData, options) {
+        if (chartData.labels && chartData.labels.length > 0) {
+          new Chart(document.getElementById(elementId), {
+            type: type,
+            data: chartData,
+            options: options
+          });
+        } else {
+          const canvas = document.getElementById(elementId);
+          const parent = canvas.parentElement;
+          parent.innerHTML = '<div class="text-center text-muted py-3"><small>Tidak ada data</small></div>';
+        }
+      }
+      
+      function renderCategory(categoryData, suffix) {
+        // Usia BOD 4-6
+        createChartIfData('usiaBod46Chart_' + suffix, 'bar', {
+          labels: categoryData.usia_bod46.labels,
+          datasets: [{
+            label: 'Jumlah',
+            data: categoryData.usia_bod46.values,
+            backgroundColor: colors.primary,
+            borderRadius: 6
+          }]
+        }, {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        });
+        
+        // Usia BOD 1-3
+        createChartIfData('usiaBod13Chart_' + suffix, 'bar', {
+          labels: categoryData.usia_bod13.labels,
+          datasets: [{
+            label: 'Jumlah',
+            data: categoryData.usia_bod13.values,
+            backgroundColor: colors.success,
+            borderRadius: 6
+          }]
+        }, {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        });
+        
+        // Usia Total
+        createChartIfData('usiaTotalChart_' + suffix, 'bar', {
+          labels: categoryData.usia_total.labels,
+          datasets: [{
+            label: 'Jumlah',
+            data: categoryData.usia_total.values,
+            backgroundColor: colors.secondary,
+            borderRadius: 6
+          }]
+        }, {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        });
+        
+        // Pendidikan BOD 4-6
+        createChartIfData('pendidikanBod46Chart_' + suffix, 'bar', {
+          labels: categoryData.pendidikan_bod46.labels,
+          datasets: [{
+            label: 'Jumlah',
+            data: categoryData.pendidikan_bod46.values,
+            backgroundColor: colors.sage,
+            borderRadius: 6
+          }]
+        }, {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        });
+        
+        // Pendidikan BOD 1-3
+        createChartIfData('pendidikanBod13Chart_' + suffix, 'bar', {
+          labels: categoryData.pendidikan_bod13.labels,
+          datasets: [{
+            label: 'Jumlah',
+            data: categoryData.pendidikan_bod13.values,
+            backgroundColor: colors.accent2,
+            borderRadius: 6
+          }]
+        }, {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        });
+        
+        // Pendidikan Total
+        createChartIfData('pendidikanTotalChart_' + suffix, 'bar', {
+          labels: categoryData.pendidikan_total.labels,
+          datasets: [{
+            label: 'Jumlah',
+            data: categoryData.pendidikan_total.values,
+            backgroundColor: colors.primary,
+            borderRadius: 6
+          }]
+        }, {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        });
+        
+        // Gender Charts
+        const genderColors = [colors.primary, colors.success];
+        const genderCharts = [
+          { id: 'genderTetapChart_' + suffix, data: categoryData.gender_tetap },
+          { id: 'genderTidakTetapChart_' + suffix, data: categoryData.gender_tidak_tetap },
+          { id: 'genderTotalChart_' + suffix, data: categoryData.gender_total }
+        ];
+        
+        genderCharts.forEach(chart => {
+          createChartIfData(chart.id, 'doughnut', {
+            labels: chart.data.labels,
+            datasets: [{
+              data: chart.data.values,
+              backgroundColor: genderColors,
+              borderWidth: 3,
+              borderColor: '#fff'
+            }]
+          }, {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'bottom' },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    const value = context.parsed.toLocaleString();
+                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                    const percentage = ((context.parsed / total) * 100).toFixed(1);
+                    return `${context.label}: ${value} (${percentage}%)`;
+                  }
+                }
+              }
+            }
+          });
+        });
+        
+        // Unit Kerja Charts
+        const unitKerjaCharts = [
+          { id: 'unitKerjaTetapChart_' + suffix, data: categoryData.unit_kerja_tetap, color: colors.success },
+          { id: 'unitKerjaTidakTetapChart_' + suffix, data: categoryData.unit_kerja_tidak_tetap, color: colors.secondary }
+        ];
+        
+        unitKerjaCharts.forEach(chart => {
+          createChartIfData(chart.id, 'bar', {
+            labels: chart.data.labels,
+            datasets: [{
+              label: 'Jumlah',
+              data: chart.data.values,
+              backgroundColor: chart.color,
+              borderRadius: 6
+            }]
+          }, {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { x: { beginAtZero: true } }
+          });
+        });
+        
+        // Tren Chart
+        createChartIfData('trenChart_' + suffix, 'bar', {
+          labels: categoryData.tren.labels,
+          datasets: [{
+            label: 'Jumlah',
+            data: categoryData.tren.values,
+            backgroundColor: [colors.success, colors.secondary],
+            borderRadius: 8
+          }]
+        }, {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.label + ': ' + context.parsed.y.toLocaleString();
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { precision: 0 }
+            }
+          }
+        });
+      }
+      
+      // Render kedua kategori
+      renderCategory(data.sub_holding, "sub");
+      renderCategory(data.non_ptpn, "non");
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error saat memuat data. Silakan coba lagi atau periksa console untuk detail error.');
+    });
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,744 @@
+{% extends "demografi/base.html" %}
+
+{% block title %}Visualisasi Data - Demografi SDM{% endblock %}
+
+{% block extra_css %}
+<style>
+  .full-width-container {
+    width: 95vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -47.5vw;
+    margin-right: -47.5vw;
+  }
+
+  .filter-section {
+    background: linear-gradient(135deg, #ffffff 0%, var(--cream-bg) 100%);
+    border-radius: 20px;
+    padding: 25px 35px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 30px;
+    border: 2px solid var(--sage-green);
+  }
+
+  .filter-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: var(--primary-green);
+    margin: 0;
+  }
+
+  .filter-title i {
+    color: var(--success-green);
+  }
+
+  /* Highlight Boxes - Green Variants */
+  .highlight-box {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+    color: white;
+    border-radius: 20px;
+    padding: 35px 25px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(67, 104, 80, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .highlight-box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  }
+
+  .highlight-box:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(67, 104, 80, 0.4);
+  }
+
+  .highlight-box h2 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin: 10px 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .highlight-box p {
+    margin: 0;
+    font-size: 1.1rem;
+    opacity: 0.95;
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+  }
+
+  .highlight-box i {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Green Variants */
+  .highlight-box.variant-1 {
+    background: linear-gradient(135deg, var(--success-green) 0%, #6bc19b 100%);
+  }
+
+  .highlight-box.variant-2 {
+    background: linear-gradient(135deg, var(--secondary-green) 0%, #6ba3c0 100%);
+  }
+
+  .highlight-box.variant-3 {
+    background: linear-gradient(135deg, var(--sage-green) 0%, #c5d4b8 100%);
+    color: var(--dark-green);
+  }
+
+  /* Chart Sections */
+  .chart-section {
+    background: white;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 30px;
+    border: 2px solid var(--cream-bg);
+    transition: all 0.3s;
+  }
+
+  .chart-section:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--sage-green);
+  }
+
+  .chart-section h4 {
+    font-family: 'Poppins', sans-serif;
+    color: var(--primary-green);
+    font-weight: 700;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid var(--cream-bg);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .chart-wrapper {
+    position: relative;
+    height: 400px;
+    margin-bottom: 20px;
+  }
+
+  .chart-wrapper.tall {
+    height: 500px;
+  }
+
+  .section-subtitle {
+    color: var(--primary-green);
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding: 8px 15px;
+    background: linear-gradient(135deg, var(--cream-bg) 0%, #ffffff 100%);
+    border-radius: 10px;
+    border-left: 4px solid var(--success-green);
+  }
+
+  /* Custom select styling */
+  .form-select {
+    border: 2px solid var(--sage-green);
+    border-radius: 12px;
+    padding: 10px 15px;
+    font-weight: 500;
+    transition: all 0.3s;
+  }
+
+  .form-select:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(67, 104, 80, 0.1);
+  }
+
+  .input-group-text {
+    background: var(--cream-bg);
+    border: 2px solid var(--sage-green);
+    color: var(--primary-green);
+  }
+
+  /* Empty state */
+  .empty-state-container {
+    background: linear-gradient(135deg, var(--cream-bg) 0%, #ffffff 100%);
+    border: 2px dashed var(--sage-green);
+    border-radius: 24px;
+    min-height: 400px;
+  }
+
+  .empty-icon-wrapper {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, var(--cream-bg), #ffffff);
+    border-radius: 50%;
+    border: 3px solid var(--sage-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .empty-icon-wrapper i {
+    color: var(--sage-green);
+  }
+
+  /* Button styling */
+  .btn-refresh {
+    background: white;
+    border: 2px solid var(--sage-green);
+    color: var(--primary-green);
+    border-radius: 12px;
+    transition: all 0.3s;
+  }
+
+  .btn-refresh:hover {
+    background: var(--cream-bg);
+    border-color: var(--primary-green);
+    transform: translateY(-2px);
+  }
+
+  .btn-back {
+    background: linear-gradient(135deg, var(--dark-green) 0%, var(--primary-green) 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    transition: all 0.3s;
+  }
+
+  .btn-back:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(18, 55, 42, 0.3);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="full-width-container">
+  <!-- Filter Section -->
+  <div class="filter-section">
+    <div class="row align-items-center">
+      <div class="col-md-4">
+        <h4 class="filter-title">
+          <i class="fas fa-chart-pie me-2"></i>Dashboard Visualisasi
+        </h4>
+        <small class="text-muted">Analisis distribusi data SDM hasil konversi</small>
+      </div>
+      <div class="col-md-8">
+        <div class="d-flex justify-content-end gap-2 flex-wrap">
+          <div class="input-group input-group-sm" style="width: 400px;">
+            <label class="input-group-text border-end-0">
+              <i class="fas fa-filter"></i>
+            </label>
+            <select id="conversionSelect" class="form-select border-start-0">
+              <option value="">-- Pilih Riwayat Konversi --</option>
+              {% for hist in histories %}
+              <option value="{{ hist.id }}" {% if hist.id == conversion_id %}selected{% endif %}>
+                #{{ hist.id }} - {{ hist.original_filename }} ({{ hist.periode }})
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <button class="btn btn-sm btn-refresh px-3" onclick="location.reload()">
+            <i class="fas fa-sync-alt"></i>
+          </button>
+
+          <a href="{{ url_for('demografi.history') }}" class="btn btn-sm btn-back px-3 d-inline-flex align-items-center">
+            <i class="fas fa-arrow-left me-2"></i>Kembali
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if conversion_id %}
+
+  <!-- Highlight Cards -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="highlight-box">
+        <i class="fas fa-users fa-2x mb-2"></i>
+        <h2 id="totalKaryawan">0</h2>
+        <p>Total Karyawan</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="highlight-box variant-1">
+        <i class="fas fa-user-check fa-2x mb-2"></i>
+        <h2 id="totalTetap">0</h2>
+        <p>Karyawan Tetap</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="highlight-box variant-2">
+        <i class="fas fa-user-clock fa-2x mb-2"></i>
+        <h2 id="totalTidakTetap">0</h2>
+        <p>Karyawan Tidak Tetap</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="highlight-box variant-3">
+        <i class="fas fa-chart-pie fa-2x mb-2"></i>
+        <h2 id="rasioTetap">0%</h2>
+        <p>Rasio Tetap vs Tidak Tetap</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Usia & Pendidikan -->
+  <div class="row g-4 mb-4">
+    <div class="col-xl-6">
+      <div class="chart-section h-100">
+        <h4>
+          <i class="fas fa-birthday-cake" style="color: var(--success-green);"></i>
+          Distribusi Usia (Karyawan Tetap)
+        </h4>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="section-subtitle">BOD 4-6 (Karpel)</div>
+            <div class="chart-wrapper" style="height: 250px;">
+              <canvas id="usiaBod46Chart"></canvas>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="section-subtitle">BOD 1-3 (Karpim)</div>
+            <div class="chart-wrapper" style="height: 250px;">
+              <canvas id="usiaBod13Chart"></canvas>
+            </div>
+          </div>
+          <div class="col-12 mt-3 pt-3 border-top">
+            <div class="section-subtitle text-center fw-bold" style="background: var(--cream-bg);">
+              Total Seluruh Level (BOD 1-6)
+            </div>
+            <div class="chart-wrapper" style="height: 250px;">
+              <canvas id="usiaTotalChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-6">
+      <div class="chart-section h-100">
+        <h4>
+          <i class="fas fa-graduation-cap" style="color: var(--secondary-green);"></i>
+          Tingkat Pendidikan (Karyawan Tetap)
+        </h4>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="section-subtitle">BOD 4-6 (Karpel)</div>
+            <div class="chart-wrapper" style="height: 250px;">
+              <canvas id="pendidikanBod46Chart"></canvas>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="section-subtitle">BOD 1-3 (Karpim)</div>
+            <div class="chart-wrapper" style="height: 250px;">
+              <canvas id="pendidikanBod13Chart"></canvas>
+            </div>
+          </div>
+          <div class="col-12 mt-3 pt-3 border-top">
+            <div class="section-subtitle text-center fw-bold" style="background: var(--cream-bg);">
+              Total Seluruh Level (BOD 1-6)
+            </div>
+            <div class="chart-wrapper" style="height: 250px;">
+              <canvas id="pendidikanTotalChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gender Visualization -->
+  <div class="chart-section mb-4">
+    <h4>
+      <i class="fas fa-venus-mars" style="color: var(--sage-green);"></i>
+      Visualisasi Data Gender
+    </h4>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="section-subtitle text-center">Karyawan Tetap</div>
+        <div class="chart-wrapper" style="height: 250px;">
+          <canvas id="genderTetapChart"></canvas>
+        </div>
+      </div>
+      <div class="col-md-4 border-start border-end">
+        <div class="section-subtitle text-center">Karyawan Tidak Tetap</div>
+        <div class="chart-wrapper" style="height: 250px;">
+          <canvas id="genderTidakTetapChart"></canvas>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="section-subtitle text-center fw-bold" style="background: var(--cream-bg);">
+          Total Semua Karyawan
+        </div>
+        <div class="chart-wrapper" style="height: 250px;">
+          <canvas id="genderTotalChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Kerja Visualization -->
+  <div class="chart-section mb-4">
+    <h4>
+      <i class="fas fa-building" style="color: var(--primary-green);"></i>
+      Visualisasi Unit Kerja
+    </h4>
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="section-subtitle">Karyawan Tetap</div>
+        <div class="chart-wrapper tall">
+          <canvas id="unitKerjaTetapChart"></canvas>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="section-subtitle">Karyawan Tidak Tetap</div>
+        <div class="chart-wrapper tall">
+          <canvas id="unitKerjaTidakTetapChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top 10 Perusahaan -->
+  <div class="chart-section mb-4">
+    <h4>
+      <i class="fas fa-sitemap" style="color: var(--secondary-green);"></i>
+      Top 10 Perusahaan
+    </h4>
+    <div class="chart-wrapper" style="height: 400px;">
+      <canvas id="companyChart"></canvas>
+    </div>
+  </div>
+
+  {% else %}
+  <!-- Empty State -->
+  <div class="chart-section empty-state-container d-flex align-items-center justify-content-center">
+    <div class="text-center p-5">
+      <div class="mb-4 d-flex justify-content-center">
+        <div class="empty-icon-wrapper">
+          <i class="fas fa-chart-bar fa-3x"></i>
+        </div>
+      </div>
+      <h4 class="fw-bold mb-2" style="color: var(--primary-green);">
+        Siap Menganalisis Data?
+      </h4>
+      <p class="text-muted mx-auto" style="max-width: 500px;">
+        Pilih salah satu hasil konversi dari dropdown di atas untuk melihat visualisasi distribusi data secara otomatis.
+      </p>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+  // Conversion select handler
+  document.getElementById('conversionSelect').addEventListener('change', function() {
+    const conversionId = this.value;
+    if (conversionId) {
+      window.location.href = "{{ url_for('demografi.visualize') }}?conversion_id=" + conversionId;
+    }
+  });
+
+  {% if conversion_id %}
+  // Fetch chart data
+  fetch("{{ url_for('demografi.api_get_chart_data', conversion_id=conversion_id) }}")
+    .then(response => response.json())
+    .then(data => {
+      console.log('Chart data:', data);
+
+      // Green color palette
+      const colors = {
+        primary: '#436850',
+        secondary: '#51829b',
+        sage: '#adbc9f',
+        success: '#8adab2',
+        accent1: '#6bc19b',
+        accent2: '#6ba3c0',
+        accent3: '#c5d4b8',
+        dark: '#12372a'
+      };
+
+      // Update highlight cards
+      document.getElementById('totalKaryawan').textContent = data.stats.total_karyawan.toLocaleString('id-ID');
+      document.getElementById('totalTetap').textContent = data.stats.total_tetap.toLocaleString('id-ID');
+
+      const totalTidakTetap = data.stats.total_karyawan - data.stats.total_tetap;
+      document.getElementById('totalTidakTetap').textContent = totalTidakTetap.toLocaleString('id-ID');
+
+      const rasioTetap = data.stats.total_karyawan > 0 
+        ? ((data.stats.total_tetap / data.stats.total_karyawan) * 100).toFixed(1)
+        : 0;
+      document.getElementById('rasioTetap').textContent = rasioTetap + '%';
+
+      // Helper function to create chart
+      function createChart(elementId, type, chartData, options) {
+        new Chart(document.getElementById(elementId), {
+          type: type,
+          data: chartData,
+          options: options
+        });
+      }
+
+      // USIA CHARTS
+      createChart('usiaBod46Chart', 'bar', {
+        labels: data.usia.labels,
+        datasets: [{
+          label: 'Jumlah Karyawan',
+          data: data.usia.values,
+          backgroundColor: colors.primary,
+          borderColor: colors.dark,
+          borderWidth: 1,
+          borderRadius: 6
+        }]
+      }, {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      });
+
+      createChart('usiaBod13Chart', 'bar', {
+        labels: data.usia.labels,
+        datasets: [{
+          label: 'Jumlah Karyawan',
+          data: data.usia.values,
+          backgroundColor: colors.success,
+          borderColor: colors.accent1,
+          borderWidth: 1,
+          borderRadius: 6
+        }]
+      }, {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      });
+
+      createChart('usiaTotalChart', 'bar', {
+        labels: data.usia.labels,
+        datasets: [{
+          label: 'Jumlah Karyawan',
+          data: data.usia.values,
+          backgroundColor: colors.secondary,
+          borderColor: colors.accent2,
+          borderWidth: 1,
+          borderRadius: 6
+        }]
+      }, {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      });
+
+      // PENDIDIKAN CHARTS
+      createChart('pendidikanBod46Chart', 'bar', {
+        labels: data.pendidikan.labels,
+        datasets: [{
+          label: 'Jumlah Karyawan',
+          data: data.pendidikan.values,
+          backgroundColor: colors.sage,
+          borderColor: colors.accent3,
+          borderWidth: 1,
+          borderRadius: 6
+        }]
+      }, {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      });
+
+      createChart('pendidikanBod13Chart', 'bar', {
+        labels: data.pendidikan.labels,
+        datasets: [{
+          label: 'Jumlah Karyawan',
+          data: data.pendidikan.values,
+          backgroundColor: colors.accent2,
+          borderColor: colors.secondary,
+          borderWidth: 1,
+          borderRadius: 6
+        }]
+      }, {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      });
+
+      createChart('pendidikanTotalChart', 'bar', {
+        labels: data.pendidikan.labels,
+        datasets: [{
+          label: 'Jumlah Karyawan',
+          data: data.pendidikan.values,
+          backgroundColor: colors.primary,
+          borderColor: colors.dark,
+          borderWidth: 1,
+          borderRadius: 6
+        }]
+      }, {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      });
+
+      // GENDER CHARTS
+      const genderColors = [colors.primary, colors.success];
+
+      createChart('genderTetapChart', 'doughnut', {
+        labels: data.gender.labels,
+        datasets: [{
+          data: data.gender.values,
+          backgroundColor: genderColors,
+          borderWidth: 3,
+          borderColor: '#fff'
+        }]
+      }, {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const value = context.parsed.toLocaleString('id-ID');
+                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                return `${context.label}: ${value} (${percentage}%)`;
+              }
+            }
+          }
+        }
+      });
+
+      createChart('genderTidakTetapChart', 'doughnut', {
+        labels: data.gender.labels,
+        datasets: [{
+          data: data.gender.values,
+          backgroundColor: genderColors,
+          borderWidth: 3,
+          borderColor: '#fff'
+        }]
+      }, {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const value = context.parsed.toLocaleString('id-ID');
+                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                return `${context.label}: ${value} (${percentage}%)`;
+              }
+            }
+          }
+        }
+      });
+
+      createChart('genderTotalChart', 'doughnut', {
+        labels: data.gender.labels,
+        datasets: [{
+          data: data.gender.values,
+          backgroundColor: genderColors,
+          borderWidth: 3,
+          borderColor: '#fff'
+        }]
+      }, {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const value = context.parsed.toLocaleString('id-ID');
+                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                return `${context.label}: ${value} (${percentage}%)`;
+              }
+            }
+          }
+        }
+      });
+
+      // UNIT KERJA CHARTS
+      createChart('unitKerjaTetapChart', 'bar', {
+        labels: data.unit_kerja.labels,
+        datasets: [{
+          label: 'Jumlah Karyawan',
+          data: data.unit_kerja.values,
+          backgroundColor: colors.success,
+          borderColor: colors.accent1,
+          borderWidth: 1,
+          borderRadius: 6
+        }]
+      }, {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true } }
+      });
+
+      createChart('unitKerjaTidakTetapChart', 'bar', {
+        labels: data.unit_kerja.labels,
+        datasets: [{
+          label: 'Jumlah Karyawan',
+          data: data.unit_kerja.values,
+          backgroundColor: colors.secondary,
+          borderColor: colors.accent2,
+          borderWidth: 1,
+          borderRadius: 6
+        }]
+      }, {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true } }
+      });
+
+      // COMPANY CHART
+      createChart('companyChart', 'bar', {
+        labels: data.company.labels,
+        datasets: [{
+          label: 'Total Karyawan',
+          data: data.company.values,
+          backgroundColor: colors.primary,
+          borderRadius: 8
+        }]
+      }, {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true } }
+      });
+
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error loading data. Please check console for details.');
+    });
+  {% endif %}
+</script>
+{% endblock %}

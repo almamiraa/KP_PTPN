@@ -1,0 +1,451 @@
+{% extends "demografi/base.html" %}
+
+{% block title %}Upload - Demografi SDM{% endblock %}
+
+{% block extra_css %}
+<style>
+  .upload-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .upload-card {
+    border: none;
+    border-radius: 24px;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    background: white;
+  }
+
+  .upload-header {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+    padding: 35px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .upload-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  }
+
+  .header-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(251, 250, 218, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    position: relative;
+    z-index: 1;
+    color: var(--cream-accent);
+  }
+
+  .upload-area {
+    border: 3px dashed #cbd5e0;
+    background: linear-gradient(135deg, var(--cream-bg) 0%, #ffffff 100%);
+    border-radius: 20px;
+    padding: 50px 30px;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+  }
+
+  .upload-area:hover {
+    border-color: var(--primary-green);
+    background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(67, 104, 80, 0.15);
+  }
+
+  .upload-area i {
+    font-size: 4rem;
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .upload-area:hover i {
+    transform: scale(1.15) rotate(-5deg);
+  }
+
+  .upload-area h5 {
+    color: var(--primary-green);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .file-info-box {
+    background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+    border: 2px solid #bbf7d0;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    animation: slideIn 0.4s ease-out;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .input-group-custom {
+    background: linear-gradient(135deg, var(--cream-bg) 0%, #ffffff 100%);
+    border: 2px solid var(--sage-green);
+    border-radius: 14px;
+    padding: 15px 20px;
+    transition: all 0.3s;
+  }
+
+  .input-group-custom:focus-within {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 4px rgba(67, 104, 80, 0.1);
+  }
+
+  .input-group-custom input {
+    border: none;
+    background: transparent;
+    padding: 0;
+    font-weight: 500;
+  }
+
+  .input-group-custom input:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .btn-proses {
+    padding: 16px;
+    font-weight: 700;
+    border-radius: 14px;
+    letter-spacing: 0.5px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+    border: none;
+    color: white;
+    font-size: 1.05rem;
+  }
+
+  .btn-proses:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(67, 104, 80, 0.4);
+    background: linear-gradient(135deg, var(--dark-green) 0%, var(--primary-green) 100%);
+  }
+
+  .btn-proses:active {
+    transform: translateY(-1px);
+  }
+
+  .company-link {
+    color: var(--primary-green);
+    text-decoration: underline;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 600;
+  }
+
+  .company-link:hover {
+    color: var(--dark-green);
+    text-decoration-thickness: 2px;
+  }
+
+  .company-item {
+    padding: 12px 16px;
+    border-radius: 12px;
+    transition: all 0.2s;
+    background: var(--cream-bg);
+    margin-bottom: 8px;
+  }
+
+  .company-item:hover {
+    background: #e8f5e9;
+    transform: translateX(5px);
+  }
+
+  .modal-header {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+    color: white;
+    border: none;
+  }
+
+  .company-count-badge {
+    background-color: rgba(251, 250, 218, 0.25);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .info-alert {
+    background: linear-gradient(135deg, var(--cream-bg) 0%, #ffffff 100%);
+    border: 2px solid var(--sage-green);
+    border-left: 5px solid var(--primary-green);
+    color: var(--dark-green);
+  }
+
+  .step-label {
+    color: var(--primary-green);
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .step-number {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .progress {
+    height: 12px;
+    border-radius: 10px;
+    background: var(--cream-bg);
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    background: linear-gradient(90deg, var(--primary-green), var(--success-green));
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="upload-container py-5">
+  <div class="card upload-card">
+    <div class="upload-header">
+      <div class="d-flex align-items-center">
+        <div class="header-icon me-4">
+          <i class="fas fa-users"></i>
+        </div>
+        <div style="position: relative; z-index: 1;">
+          <h2 class="fw-bold mb-1">Konversi Data Demografi SDM</h2>
+          <p class="mb-0 opacity-90">Upload file Excel untuk analisis multi-dimensional</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body p-4 p-md-5">
+      <div class="alert info-alert border-0 shadow-sm d-flex align-items-start mb-4">
+        <i class="fas fa-info-circle fs-4 me-3 mt-1"></i>
+        <div>
+          <strong>Informasi Proses:</strong><br>
+                Sistem akan otomatis memproses data untuk
+                <button type="button"
+                        class="company-link btn btn-link p-0 align-baseline"
+                        data-bs-toggle="modal"
+                        data-bs-target="#companyModal">
+                <strong>{{ company_count }} perusahaan</strong>
+                </button>
+                ke dalam <strong>5 dimensi analisis</strong> (Gender, Pendidikan, Usia, Unit Kerja, dan Tren).
+                    </div>
+                </div>
+
+      <form action="{{ url_for('demografi.convert') }}" method="post" enctype="multipart/form-data" id="uploadForm">
+        <!-- Step 1: File Upload -->
+        <div class="mb-5">
+          <div class="step-label">
+            <span class="step-number">1</span>
+            Pilih File Excel
+          </div>
+          <div class="upload-area" id="uploadArea">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <h5>Klik atau seret file ke sini</h5>
+            <p class="text-muted mb-0">Format: .xlsx atau .xlsm (Maksimal 50MB)</p>
+            <input type="file" class="d-none" id="fileInput" name="file" accept=".xlsx,.xlsm" required />
+          </div>
+          <div id="fileDisplayArea" class="d-none">
+            <div class="file-info-box">
+              <i class="fas fa-file-excel text-success fs-3 me-3"></i>
+              <div class="flex-grow-1">
+                <div id="fileNameDisplay" class="fw-bold text-dark"></div>
+                <div id="fileSizeDisplay" class="text-muted small"></div>
+              </div>
+              <button type="button" class="btn-close" id="removeFile"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Periode -->
+        <div class="mb-5">
+          <div class="step-label">
+            <span class="step-number">2</span>
+            Tentukan Periode Data
+          </div>
+          <div class="input-group-custom d-flex align-items-center">
+            <i class="fas fa-calendar-alt fs-5 me-3" style="color: var(--primary-green);"></i>
+            <input type="date" class="form-control" id="periode" name="periode" required />
+          </div>
+          <div class="form-text mt-2 ms-1">
+            <i class="fas fa-lightbulb me-1"></i>
+            Pilih tanggal periode data yang akan diproses
+          </div>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="mb-4 d-none" id="progressContainer">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="fw-bold" style="color: var(--primary-green);">
+              <i class="fas fa-spinner fa-spin me-2"></i>
+              Sedang memproses dokumen...
+            </span>
+            <span class="badge badge-success">Processing</span>
+          </div>
+          <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="d-grid">
+          <button type="submit" class="btn btn-proses shadow-lg" id="submitBtn">
+            <i class="fas fa-sync-alt me-2"></i>
+            Mulai Proses Konversi
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Daftar Perusahaan -->
+<div class="modal fade" id="companyModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="true"> 
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden;">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold d-flex align-items-center">
+          <i class="fas fa-building me-2"></i>
+          Daftar Perusahaan
+          <span class="company-count-badge ms-2">{{ company_count }}</span>
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="alert alert-light border d-flex align-items-center mb-4">
+          <i class="fas fa-info-circle me-2" style="color: var(--primary-green);"></i>
+          <small class="mb-0">Sistem akan memproses data untuk semua perusahaan berikut secara otomatis</small>
+        </div>
+
+        <div class="row g-2">
+          {% for company in companies %}
+          <div class="col-md-6">
+            <div class="company-item">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-check-circle me-2" style="color: var(--success-green);"></i>
+                <span class="fw-500">{{ company }}</span>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const uploadArea = document.getElementById("uploadArea");
+  const fileInput = document.getElementById("fileInput");
+  const fileDisplayArea = document.getElementById("fileDisplayArea");
+  const fileNameDisplay = document.getElementById("fileNameDisplay");
+  const fileSizeDisplay = document.getElementById("fileSizeDisplay");
+  const removeFile = document.getElementById("removeFile");
+  const uploadForm = document.getElementById("uploadForm");
+  const submitBtn = document.getElementById("submitBtn");
+  const progressContainer = document.getElementById("progressContainer");
+
+  // Click to upload
+  uploadArea.addEventListener("click", () => fileInput.click());
+
+  // File selected
+  fileInput.addEventListener("change", (e) => {
+    handleFiles(e.target.files);
+  });
+
+  function handleFiles(files) {
+    if (files.length > 0) {
+      const file = files[0];
+      fileNameDisplay.textContent = file.name;
+      fileSizeDisplay.textContent = (file.size / 1024 / 1024).toFixed(2) + " MB";
+
+      uploadArea.classList.add("d-none");
+      fileDisplayArea.classList.remove("d-none");
+    }
+  }
+
+  // Remove file
+  removeFile.addEventListener("click", (e) => {
+    e.stopPropagation();
+    fileInput.value = "";
+    uploadArea.classList.remove("d-none");
+    fileDisplayArea.classList.add("d-none");
+  });
+
+  // Drag & Drop
+  ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+    uploadArea.addEventListener(eventName, (e) => e.preventDefault(), false);
+  });
+
+  uploadArea.addEventListener("dragover", () => {
+    uploadArea.style.borderColor = "var(--primary-green)";
+  });
+
+  uploadArea.addEventListener("dragleave", () => {
+    uploadArea.style.borderColor = "#cbd5e0";
+  });
+
+  uploadArea.addEventListener("drop", (e) => {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    fileInput.files = files;
+    handleFiles(files);
+  });
+
+window.addEventListener('click', () => {
+    if (document.body.classList.contains('modal-open')) {
+      document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+      document.body.classList.remove('modal-open');
+      document.body.style.paddingRight = '';
+    }
+  });
+
+  // Form submit
+  uploadForm.addEventListener("submit", () => {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Memproses Data...`;
+    progressContainer.classList.remove("d-none");
+  });
+</script>
+{% endblock %}

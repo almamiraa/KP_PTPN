@@ -1,0 +1,485 @@
+{% extends "cost/base.html" %}
+
+{% block title %}Dashboard Cost - Cost Converter{% endblock %}
+
+{% block extra_css %}
+<style>
+  .full-width-container {
+    width: 95vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -47.5vw;
+    margin-right: -47.5vw;
+  }
+
+  /* Filter Card Style (mirip demografi) */
+  .filter-card {
+    background: linear-gradient(135deg, #ffffff 0%, var(--cream-bg) 100%);
+    border-radius: 20px;
+    padding: 30px 35px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 30px;
+    border: 2px solid var(--sage-green);
+  }
+
+  .filter-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: var(--primary-green);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .btn-filter {
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+
+  .btn-filter:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(67, 104, 80, 0.3);
+    color: white;
+  }
+
+  .btn-add {
+    background: linear-gradient(135deg, var(--secondary-green), #6ba3c0);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+
+  .btn-add:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(81, 130, 155, 0.3);
+    color: white;
+  }
+
+  /* Highlight Cards */
+  .highlight-box {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+    color: white;
+    border-radius: 20px;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(67, 104, 80, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    min-height: 160px;
+    max-height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .highlight-box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  }
+
+  .highlight-box:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(67, 104, 80, 0.4);
+  }
+
+  .highlight-box h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin: 8px 0;
+    position: relative;
+    z-index: 1;
+    word-break: break-word;
+    line-height: 1.2;
+  }
+
+  .highlight-box p {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.95;
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+  }
+
+  .highlight-box i {
+    position: relative;
+    z-index: 1;
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+  }
+
+  .highlight-box.variant-1 {
+    background: linear-gradient(135deg, var(--success-green) 0%, #6bc19b 100%);
+  }
+
+  .highlight-box.variant-2 {
+    background: linear-gradient(135deg, var(--secondary-green) 0%, #6ba3c0 100%);
+  }
+
+  .highlight-box.variant-3 {
+    background: linear-gradient(135deg, var(--sage-green) 0%, #c5d4b8 100%);
+    color: var(--dark-green);
+  }
+
+  /* Chart Sections */
+  .chart-section {
+    background: white;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 30px;
+    border: 2px solid var(--cream-bg);
+    transition: all 0.3s;
+  }
+
+  .chart-section:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--sage-green);
+  }
+
+  .chart-section h4 {
+    font-family: 'Poppins', sans-serif;
+    color: var(--primary-green);
+    font-weight: 700;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid var(--cream-bg);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .chart-wrapper {
+    position: relative;
+    height: 400px;
+    margin-bottom: 20px;
+  }
+
+  .chart-wrapper.tall {
+    height: 500px;
+  }
+
+  .form-select, .form-label {
+    font-weight: 500;
+  }
+
+  .form-select {
+    border: 2px solid var(--sage-green);
+    border-radius: 12px;
+    padding: 10px 15px;
+    transition: all 0.3s;
+  }
+
+  .form-select:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(67, 104, 80, 0.1);
+  }
+
+  .empty-state-container {
+    background: linear-gradient(135deg, var(--cream-bg) 0%, #ffffff 100%);
+    border: 2px dashed var(--sage-green);
+    border-radius: 24px;
+    min-height: 400px;
+  }
+
+  .empty-icon-wrapper {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, var(--cream-bg), #ffffff);
+    border-radius: 50%;
+    border: 3px solid var(--sage-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .empty-icon-wrapper i {
+    color: var(--sage-green);
+  }
+
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 20px;
+    margin-bottom: 10px;
+  }
+
+  .legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-right: 8px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="full-width-container">
+  <!-- Filter Section (mirip demografi, cuma tahun aja) -->
+  <div class="filter-card">
+    <div class="row align-items-center">
+      <div class="col-md-2">
+        <div class="d-flex align-items-center">
+          <i class="fas fa-chart-line fs-1 me-3" style="color: var(--success-green);"></i>
+          <div>
+            <h4 class="filter-title">Dashboard</h4>
+            <h4 class="filter-title">Tahunan</h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-10">
+        <form method="GET" action="{{ url_for('cost.dashboard') }}" class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label small fw-bold mb-1" style="color: var(--primary-green);">Tahun</label>
+            <select name="year" class="form-select" required>
+              <option value="">-- Pilih Tahun --</option>
+              {% for y in range(current_year - 5, current_year + 2) %}
+              <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <div class="col-md-3 d-flex align-items-end">
+            <button type="submit" class="btn btn-filter w-100">
+              <i class="fas fa-search me-2"></i>Tampilkan Data
+            </button>
+          </div>
+          
+          <div class="col-md-3 d-flex align-items-end">
+            <a href="{{ url_for('cost.history') }}" class="btn btn-add w-100">
+              <i class="fas fa-history me-1"></i>Riwayat Upload
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {% if selected_year and has_data %}
+
+  <!-- 4 Highlight Cards -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="highlight-box">
+        <i class="fas fa-coins"></i>
+        <h2 id="totalReal">Rp 0</h2>
+        <p>Total REAL Bulan Ini</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="highlight-box variant-1">
+        <i class="fas fa-file-invoice-dollar"></i>
+        <h2 id="totalRkap">Rp 0</h2>
+        <p>Total RKAP Bulan Ini</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="highlight-box variant-2">
+        <i class="fas fa-chart-line"></i>
+        <h2 id="totalRealSD">Rp 0</h2>
+        <p>Total REAL S.d.</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="highlight-box variant-3">
+        <i class="fas fa-calendar-check"></i>
+        <h2 id="totalRkapSD">Rp 0</h2>
+        <p>Total RKAP S.d.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Monthly Trend Chart (4 lines) -->
+  <div class="chart-section mb-4">
+    <h4>
+      <i class="fas fa-chart-area" style="color: var(--success-green);"></i>
+      Tren Bulanan {{ selected_year }} 
+    </h4>
+    <div class="text-center mb-3">
+      <div class="legend-item">
+        <div class="legend-color" style="background: var(--primary-green);"></div>
+        <span>REAL Bulan Ini</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: var(--success-green);"></div>
+        <span>REAL S.d.</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: var(--secondary-green);"></div>
+        <span>RKAP Bulan Ini</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: var(--sage-green);"></div>
+        <span>RKAP S.d.</span>
+      </div>
+    </div>
+    <div class="chart-wrapper tall">
+      <canvas id="monthlyTrendChart"></canvas>
+    </div>
+  </div>
+
+  {% else %}
+  <!-- Empty State -->
+  <div class="chart-section empty-state-container d-flex align-items-center justify-content-center">
+    <div class="text-center p-5">
+      <div class="mb-4 d-flex justify-content-center">
+        <div class="empty-icon-wrapper">
+          <i class="fas fa-chart-bar fa-3x"></i>
+        </div>
+      </div>
+      <h4 class="fw-bold mb-2" style="color: var(--primary-green);">
+        {% if selected_year %}
+        Tidak Ada Data untuk Tahun {{ selected_year }}
+        {% else %}
+        Pilih Tahun untuk Analisis
+        {% endif %}
+      </h4>
+      <p class="text-muted mx-auto" style="max-width: 500px;">
+        {% if selected_year %}
+        Belum ada data cost yang diupload untuk tahun ini.
+        {% else %}
+        Pilih tahun dari dropdown di atas untuk melihat dashboard analisis cost tahunan.
+        {% endif %}
+      </p>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+  {% if selected_year and has_data %}
+  // Fetch yearly data
+  fetch("{{ url_for('cost.api_yearly_data', year=selected_year) }}")
+    .then(response => response.json())
+    .then(data => {
+        console.log('Yearly data:', data);
+
+        if (!data.success) {
+            console.error('API returned no data:', data);
+            alert(data.message || 'Data tidak tersedia');
+            return;
+        }
+
+        if (!data.totals || !data.monthly) {
+            console.error('Invalid data structure:', data);
+            alert('Struktur data API tidak sesuai');
+            return;
+        }
+
+      // Green color palette
+      const colors = {
+        primary: '#436850',      // REAL Bulan
+        success: '#8adab2',      // REAL SD
+        secondary: '#51829b',    // RKAP Bulan
+        sage: '#adbc9f'          // RKAP SD
+      };
+
+      // Update 4 highlight cards
+      document.getElementById('totalReal').textContent = 
+        'Rp ' + (data.totals.total_real || 0).toLocaleString('id-ID', {maximumFractionDigits: 0});
+      document.getElementById('totalRkap').textContent = 
+        'Rp ' + (data.totals.total_rkap || 0).toLocaleString('id-ID', {maximumFractionDigits: 0});
+      document.getElementById('totalRealSD').textContent = 
+        'Rp ' + (data.totals.total_real_sd || 0).toLocaleString('id-ID', {maximumFractionDigits: 0});
+      document.getElementById('totalRkapSD').textContent = 
+        'Rp ' + (data.totals.total_rkap_sd || 0).toLocaleString('id-ID', {maximumFractionDigits: 0});
+
+      // Monthly Trend Chart (4 lines - one for each value)
+      new Chart(document.getElementById('monthlyTrendChart'), {
+        type: 'line',
+        data: {
+          labels: data.monthly.labels, // ['Jan', 'Feb', 'Mar', ...]
+          datasets: [
+            {
+              label: 'REAL Bulan Ini',
+              data: data.monthly.real_values,
+              borderColor: colors.primary,
+              backgroundColor: 'rgba(67, 104, 80, 0.1)',
+              borderWidth: 3,
+              tension: 0.4,
+              fill: false
+            },
+            {
+              label: 'REAL S.d.',
+              data: data.monthly.real_sd_values,
+              borderColor: colors.success,
+              backgroundColor: 'rgba(138, 218, 178, 0.1)',
+              borderWidth: 3,
+              tension: 0.4,
+              fill: false
+            },
+            {
+              label: 'RKAP Bulan Ini',
+              data: data.monthly.rkap_values,
+              borderColor: colors.secondary,
+              backgroundColor: 'rgba(81, 130, 155, 0.1)',
+              borderWidth: 3,
+              tension: 0.4,
+              fill: false
+            },
+            {
+              label: 'RKAP S.d.',
+              data: data.monthly.rkap_sd_values,
+              borderColor: colors.sage,
+              backgroundColor: 'rgba(173, 188, 159, 0.1)',
+              borderWidth: 3,
+              tension: 0.4,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.dataset.label + ': Rp ' + 
+                    context.parsed.y.toLocaleString('id-ID', {maximumFractionDigits: 0});
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  return 'Rp ' + (value / 1000000).toFixed(0) + 'M';
+                }
+              }
+            }
+          }
+        }
+      });
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error loading data. Please check console.');
+    });
+  {% endif %}
+</script>
+{% endblock %}

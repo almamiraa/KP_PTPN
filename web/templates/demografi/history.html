@@ -1,0 +1,831 @@
+{% extends "demografi/base.html" %}
+
+{% block title %}Riwayat Konversi - Demografi SDM{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Full width container */
+  .full-width-container {
+    width: 90vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -45vw;
+    margin-right: -45vw;
+  }
+
+  .history-card {
+    border: none;
+    border-radius: 24px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    background: white;
+  }
+
+  .history-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-green), var(--sage-green), var(--success-green));
+  }
+
+  .card-header-history {
+    background: linear-gradient(135deg, #ffffff 0%, var(--cream-bg) 100%);
+    border-bottom: 2px solid var(--sage-green);
+    padding: 24px 28px;
+  }
+
+  .header-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--primary-green);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .badge-count {
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+    color: white;
+    padding: 8px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    min-width: 100px;
+    box-shadow: 0 4px 12px rgba(67, 104, 80, 0.2);
+  }
+
+  .table thead th {
+    background: linear-gradient(135deg, #f8f9fa 0%, var(--cream-bg) 100%);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    color: var(--primary-green);
+    padding: 18px 15px;
+    border-bottom: 2px solid var(--sage-green);
+  }
+
+  .table tbody td {
+    padding: 18px 15px;
+    vertical-align: middle;
+    transition: all 0.2s;
+  }
+
+  .table tbody tr {
+    transition: all 0.2s;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .table tbody tr:hover {
+    background: linear-gradient(135deg, var(--cream-bg) 0%, #ffffff 100%);
+    transform: scale(1.01);
+    box-shadow: 0 2px 8px rgba(67, 104, 80, 0.08);
+  }
+
+  /* ✅ Badge colors - Updated with WARNING */
+  .bg-soft-success {
+    background: linear-gradient(135deg, #e8f5f0 0%, #ffffff 100%);
+    border: 2px solid var(--success-green) !important;
+    color: #2d6a4f;
+  }
+
+  .bg-soft-warning {
+    background: linear-gradient(135deg, #fff4e6 0%, #ffffff 100%);
+    border: 2px solid #ff9800 !important;
+    color: #e65100;
+  }
+
+  .bg-soft-danger {
+    background: linear-gradient(135deg, #ffe5e5 0%, #ffffff 100%);
+    border: 2px solid var(--danger) !important;
+    color: #c92a2a;
+  }
+
+  .bg-soft-info {
+    background: linear-gradient(135deg, var(--cream-bg) 0%, #ffffff 100%);
+    border: 2px solid var(--secondary-green) !important;
+    color: var(--dark-green);
+  }
+
+  /* ✅ Company link styling */
+  .company-link {
+    color: var(--primary-green);
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+
+  .company-link:hover {
+    color: var(--dark-green);
+    text-decoration-thickness: 2px;
+  }
+
+  .company-coverage-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    margin-left: 8px;
+    font-weight: 600;
+  }
+
+  .coverage-100 {
+    background: #e8f5f0;
+    color: #2d6a4f;
+    border: 1px solid var(--success-green);
+  }
+
+  .coverage-warning {
+    background: #fff4e6;
+    color: #e65100;
+    border: 1px solid #ff9800;
+  }
+
+  .coverage-failed {
+    background: #ffe5e5;
+    color: #c92a2a;
+    border: 1px solid var(--danger);
+  }
+
+  .btn-action {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid;
+  }
+
+  .btn-action:hover:not(:disabled) {
+    transform: translateY(-3px);
+  }
+
+  .btn-action:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .btn-outline-success {
+    border-color: var(--success-green);
+    color: var(--success-green);
+  }
+
+  .btn-outline-success:hover {
+    background: var(--success-green);
+    color: white;
+    box-shadow: 0 6px 16px rgba(138, 218, 178, 0.3);
+  }
+
+  .btn-outline-primary {
+    border-color: var(--primary-green);
+    color: var(--primary-green);
+  }
+
+  .btn-outline-primary:hover {
+    background: var(--primary-green);
+    color: white;
+    box-shadow: 0 6px 16px rgba(67, 104, 80, 0.3);
+  }
+
+  .btn-outline-warning {
+    border-color: #ff9800;
+    color: #ff9800;
+  }
+
+  .btn-outline-warning:hover {
+    background: #ff9800;
+    color: white;
+    box-shadow: 0 6px 16px rgba(255, 152, 0, 0.3);
+  }
+
+  .btn-outline-danger {
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+
+  .btn-outline-danger:hover {
+    background: var(--danger);
+    color: white;
+    box-shadow: 0 6px 16px rgba(255, 128, 128, 0.3);
+  }
+
+  /* Month badges */
+  .badge-month {
+    font-weight: 600;
+    min-width: 90px;
+    padding: 8px 16px;
+    border-radius: 10px;
+  }
+
+  .month-1 { background: linear-gradient(135deg, #e3f2fd, #bbdefb); color: #0d47a1; border: 2px solid #90caf9; }
+  .month-2 { background: linear-gradient(135deg, #f3e5f5, #e1bee7); color: #4a148c; border: 2px solid #ce93d8; }
+  .month-3 { background: linear-gradient(135deg, var(--cream-bg), #c8e6c9); color: var(--dark-green); border: 2px solid var(--sage-green); }
+  .month-4 { background: linear-gradient(135deg, #fff3e0, #ffe0b2); color: #e65100; border: 2px solid #ffcc80; }
+  .month-5 { background: linear-gradient(135deg, #fce4ec, #f8bbd0); color: #880e4f; border: 2px solid #f48fb1; }
+  .month-6 { background: linear-gradient(135deg, #e0f2f1, #b2dfdb); color: #004d40; border: 2px solid #80cbc4; }
+  .month-7 { background: linear-gradient(135deg, #fffde7, #fff9c4); color: #f57f17; border: 2px solid #fff59d; }
+  .month-8 { background: linear-gradient(135deg, #efebe9, #d7ccc8); color: #3e2723; border: 2px solid #bcaaa4; }
+  .month-9 { background: linear-gradient(135deg, #f1f8e9, #dcedc8); color: #33691e; border: 2px solid #c5e1a5; }
+  .month-10 { background: linear-gradient(135deg, #e8eaf6, #c5cae9); color: #1a237e; border: 2px solid #9fa8da; }
+  .month-11 { background: linear-gradient(135deg, #f9fbe7, #f0f4c3); color: #827717; border: 2px solid #e6ee9c; }
+  .month-12 { background: linear-gradient(135deg, #eceff1, #cfd8dc); color: #263238; border: 2px solid #b0bec5; }
+
+  .stats-footer {
+    background: linear-gradient(135deg, var(--cream-bg) 0%, #ffffff 100%);
+    border-top: 2px solid var(--sage-green);
+    padding: 20px;
+  }
+
+  .stats-item {
+    padding: 12px;
+    border-radius: 12px;
+    transition: all 0.2s;
+  }
+
+  .stats-item:hover {
+    background: rgba(67, 104, 80, 0.05);
+  }
+
+  .empty-state {
+    padding: 80px 20px;
+    text-align: center;
+  }
+
+  .empty-icon {
+    font-size: 5rem;
+    color: var(--sage-green);
+    margin-bottom: 20px;
+    opacity: 0.5;
+  }
+
+  /* Modal styling */
+  .modal-header-danger {
+    background: linear-gradient(135deg, var(--danger) 0%, #ff6b6b 100%);
+    color: white;
+    border: none;
+  }
+
+  .modal-header-warning {
+    background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);
+    color: white;
+    border: none;
+  }
+
+  .modal-content {
+    border-radius: 20px;
+    border: none;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .alert-warning {
+    background: linear-gradient(135deg, #fff4e6 0%, #ffffff 100%);
+    border: 2px solid #ff9800;
+    border-left: 5px solid #ff9800;
+    color: #e65100;
+  }
+
+  .alert-danger {
+    background: linear-gradient(135deg, #ffe5e5 0%, #ffffff 100%);
+    border: 2px solid var(--danger);
+    border-left: 5px solid var(--danger);
+    color: #c92a2a;
+  }
+
+  .file-icon {
+    color: var(--success-green);
+    opacity: 0.6;
+    transition: all 0.2s;
+  }
+
+  .table tbody tr:hover .file-icon {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  /* ✅ Validation detail list */
+  .validation-item {
+    padding: 12px;
+    border-radius: 8px;
+    background: #f8f9fa;
+    margin-bottom: 8px;
+    border-left: 3px solid var(--primary-green);
+  }
+
+  .validation-item.warning {
+    border-left-color: #ff9800;
+    background: #fff9f0;
+  }
+
+  .validation-item.error {
+    border-left-color: var(--danger);
+    background: #fff5f5;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="full-width-container">
+  <div class="card history-card">
+    <div class="card-header-history d-flex justify-content-between align-items-center">
+      <h4 class="header-title">
+        <i class="fas fa-history"></i>
+        Riwayat Konversi
+      </h4>
+      <div class="d-flex gap-2 align-items-center">
+        <span class="badge badge-count d-inline-flex align-items-center justify-content-center">
+          <i class="fas fa-database me-2"></i>
+          {{ histories|length }} Records
+        </span>
+        <a href="{{ url_for('demografi.index') }}" class="btn btn-outline-primary">
+          <i class="fas fa-plus me-1"></i>
+          Baru
+        </a>
+      </div>
+    </div>
+
+    <div class="card-body p-0">
+      {% if histories and histories|length > 0 %}
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th class="text-center" style="width: 40px">#</th>
+              <th>Detail File</th>
+              <th class="text-center">Periode</th>
+              <th class="text-center">Perusahaan</th>
+              <th class="text-center">Coverage</th>
+              <th class="text-center">Volume</th>
+              <th class="text-center">Waktu & Durasi</th>
+              <th class="text-center">Status</th>
+              <th class="text-center">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in histories %}
+            <tr>
+              <td class="text-center text-muted small fw-bold">{{ loop.index }}</td>
+
+              <td>
+                <div class="d-flex align-items-center">
+                  <div class="me-3">
+                    <i class="fas fa-file-excel fa-2x file-icon"></i>
+                  </div>
+                  <div style="max-width: 250px">
+                    <div class="text-truncate fw-bold text-dark" title="{{ row.original_filename }}">
+                      {{ row.original_filename }}
+                    </div>
+                    <div class="text-muted small">
+                      <i class="fas fa-hashtag me-1"></i>ID: {{ row.id }}
+                    </div>
+                  </div>
+                </div>
+              </td>
+
+              <td class="text-center">
+                {% set month_num = row.periode[5:7] | int %}
+                <span class="badge badge-month month-{{ month_num }}">
+                  <i class="far fa-calendar-alt me-1"></i>
+                  {{ row.periode }}
+                </span>
+              </td>
+
+              <td class="text-center">
+                {% if row.total_companies %}
+                  <span class="company-link" 
+                        onclick="showValidationDetail({{ row.id }})"
+                        title="Klik untuk detail">
+                    <i class="fas fa-building me-1"></i>
+                    {{ row.processed_companies }} / {{ row.total_companies }}
+                  </span>
+                {% else %}
+                  <!-- Old data without validation -->
+                  <span style="color: var(--primary-green);">
+                    <i class="fas fa-building me-1 opacity-50"></i>
+                    {{ row.perusahaan }}
+                  </span>
+                {% endif %}
+              </td>
+
+              <!-- ✅ Coverage Column -->
+              <td class="text-center">
+                {% if row.total_companies %}
+                  {% set coverage = row.company_coverage_percent %}
+                  {% if coverage >= 100 %}
+                    <span class="company-coverage-badge coverage-100">
+                      <i class="fas fa-check-circle me-1"></i>{{ coverage|round(1) }}%
+                    </span>
+                  {% elif coverage >= 90 %}
+                    <span class="company-coverage-badge coverage-warning">
+                      <i class="fas fa-exclamation-triangle me-1"></i>{{ coverage|round(1) }}%
+                    </span>
+                  {% else %}
+                    <span class="company-coverage-badge coverage-failed">
+                      <i class="fas fa-times-circle me-1"></i>{{ coverage|round(1) }}%
+                    </span>
+                  {% endif %}
+                {% else %}
+                  <!-- Old data without validation -->
+                  <span class="text-muted small">-</span>
+                {% endif %}
+              </td>
+
+              <td class="text-center">
+                <div class="fw-bold" style="color: var(--primary-green);">
+                  {{ "{:,}".format(row.total_rows) }}
+                </div>
+                <div class="small text-muted">Baris</div>
+              </td>
+
+              <td class="text-center">
+                <div class="small fw-medium text-dark">{{ row.created_at }}</div>
+                <div class="text-muted small">
+                  <i class="fas fa-stopwatch me-1"></i>{{ row.duration|round(2) }}s
+                </div>
+              </td>
+
+              <!-- ✅ UPDATED: Status Badge with WARNING -->
+              <td class="text-center">
+                {% if row.status == 'success' %}
+                <span class="badge rounded-pill bg-soft-success px-3 py-2">
+                  <i class="fas fa-check-circle me-1"></i>
+                  Berhasil
+                </span>
+                {% elif row.status == 'warning' %}
+                <span class="badge rounded-pill bg-soft-warning px-3 py-2">
+                  <i class="fas fa-exclamation-triangle me-1"></i>
+                  Warning
+                </span>
+                {% else %}
+                <span class="badge rounded-pill bg-soft-danger px-3 py-2">
+                  <i class="fas fa-times-circle me-1"></i>
+                  Gagal
+                </span>
+                {% endif %}
+              </td>
+
+              <!-- ✅ UPDATED: Action Buttons with Conditional Logic -->
+              <td class="text-center">
+                <div class="d-flex justify-content-center gap-2">
+                  <!-- Download Button -->
+                  {% if row.status == 'failed' %}
+                    <!-- Failed: Cannot download -->
+                    <button class="btn btn-action btn-outline-success" 
+                            disabled 
+                            title="File tidak tersedia untuk konversi gagal">
+                      <i class="fas fa-ban"></i>
+                    </button>
+                  {% elif row.file_exists %}
+                    <!-- Success/Warning: Can download -->
+                    <a href="{{ url_for('demografi.download', conversion_id=row.id) }}" 
+                       class="btn btn-action btn-outline-success" 
+                       title="Download Excel">
+                      <i class="fas fa-download"></i>
+                    </a>
+                  {% else %}
+                    <!-- No file -->
+                    <button class="btn btn-action btn-light border text-muted" 
+                            disabled 
+                            title="File tidak tersedia">
+                      <i class="fas fa-ban"></i>
+                    </button>
+                  {% endif %}
+
+                  <!-- View Data Button -->
+                  {% if row.status == 'success' or row.status == 'warning' %}
+                  <a href="{{ url_for('demografi.view_data', conversion_id=row.id) }}" 
+                     class="btn btn-action btn-outline-primary" 
+                     title="Lihat Data">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  {% endif %}
+
+                  <!-- ✅ Validation Detail Button (for warning/failed) -->
+                  {% if (row.status == 'warning' or row.status == 'failed') and row.total_companies %}
+                  <button class="btn btn-action btn-outline-warning" 
+                          title="Lihat Detail Validasi" 
+                          onclick="showValidationDetail({{ row.id }})">
+                    <i class="fas fa-info-circle"></i>
+                  </button>
+                  {% endif %}
+
+                  <!-- Delete Button -->
+                  <button class="btn btn-action btn-outline-danger" 
+                          title="Hapus" 
+                          data-id="{{ row.id }}" 
+                          data-filename="{{ row.original_filename | e }}" 
+                          onclick="confirmDelete(this)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Footer Stats -->
+      <div class="stats-footer">
+        <div class="row text-center">
+          <div class="col-md-3">
+            <div class="stats-item">
+              <div class="small text-muted mb-1">Total Baris Diproses</div>
+              <div class="fw-bold fs-5" style="color: var(--primary-green);">
+                {{ "{:,}".format(histories|sum(attribute='total_rows')) }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stats-item">
+              <div class="small text-muted mb-1">Konversi Berhasil</div>
+              <div class="fw-bold fs-5" style="color: var(--success-green);">
+                {{ histories|selectattr('status', 'equalto', 'success')|list|length }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stats-item">
+              <div class="small text-muted mb-1">Warning</div>
+              <div class="fw-bold fs-5" style="color: #ff9800;">
+                {{ histories|selectattr('status', 'equalto', 'warning')|list|length }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stats-item">
+              <div class="small text-muted mb-1">Konversi Gagal</div>
+              <div class="fw-bold fs-5" style="color: var(--danger);">
+                {{ histories|selectattr('status', 'equalto', 'failed')|list|length }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% else %}
+      <!-- Empty State -->
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="fas fa-database"></i>
+        </div>
+        <h5 class="text-muted mb-3">Belum Ada Riwayat Konversi</h5>
+        <p class="text-muted mb-4">Silahkan lakukan konversi file terlebih dahulu</p>
+        <a href="{{ url_for('demografi.index') }}" class="btn btn-primary btn-lg px-5">
+          <i class="fas fa-upload me-2"></i>
+          Mulai Konversi
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header modal-header-danger">
+        <h5 class="modal-title">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          Konfirmasi Hapus
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="alert alert-warning mb-4">
+          <i class="fas fa-exclamation-circle me-2"></i>
+          <strong>Perhatian!</strong> Tindakan ini tidak dapat dibatalkan.
+        </div>
+
+        <p class="mb-2 fw-bold">Anda akan menghapus:</p>
+        <ul class="mb-3">
+          <li><strong>File:</strong> <span id="deleteFileName"></span></li>
+          <li><strong>ID:</strong> #<span id="deleteId"></span></li>
+        </ul>
+
+        <div class="alert alert-light border">
+          <p class="text-muted small mb-2">
+            <i class="fas fa-info-circle me-1"></i>
+            <strong>Data yang akan dihapus:</strong>
+          </p>
+          <ul class="text-muted small mb-0">
+            <li>History konversi</li>
+            <li>Data semua dimensi (Gender, Pendidikan, Usia, Unit Kerja, Tren)</li>
+            <li>File Excel dari database</li>
+          </ul>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <form id="deleteForm" method="POST" style="display: inline">
+          <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash me-2"></i>
+            Hapus 
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ NEW: Validation Detail Modal -->
+<div class="modal fade" id="validationModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header modal-header-warning">
+        <h5 class="modal-title">
+          <i class="fas fa-clipboard-check me-2"></i>
+          Detail Validasi
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4" id="validationModalBody">
+        <!-- Content will be loaded dynamically -->
+        <div class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-3 text-muted">Loading validation details...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Delete confirmation
+  function confirmDelete(button) {
+    const id = button.getAttribute("data-id");
+    const filename = button.getAttribute("data-filename");
+
+    document.getElementById("deleteId").textContent = id;
+    document.getElementById("deleteFileName").textContent = filename;
+    document.getElementById("deleteForm").action = "{{ url_for('demografi.delete_conversion', conversion_id=0) }}".replace("0", id);
+
+    const modal = new bootstrap.Modal(document.getElementById("deleteModal"));
+    modal.show();
+  }
+
+  // ✅ NEW: Show validation detail
+  function showValidationDetail(conversionId) {
+    const modal = new bootstrap.Modal(document.getElementById("validationModal"));
+    const modalBody = document.getElementById("validationModalBody");
+    
+    // Show loading
+    modalBody.innerHTML = `
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-3 text-muted">Loading validation details...</p>
+      </div>
+    `;
+    
+    modal.show();
+    
+    // Fetch validation data
+    fetch(`/demografi/api/validation-detail/${conversionId}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          modalBody.innerHTML = `
+            <div class="alert alert-danger">
+              <i class="fas fa-exclamation-circle me-2"></i>
+              Error: ${data.error}
+            </div>
+          `;
+          return;
+        }
+        
+        let html = '';
+        
+        // Company Coverage Section
+        html += `
+          <div class="mb-4">
+            <h6 class="fw-bold mb-3">
+              <i class="fas fa-building me-2" style="color: var(--primary-green);"></i>
+              Coverage Perusahaan
+            </h6>
+            <div class="alert ${data.coverage_percent >= 100 ? 'alert-success' : (data.coverage_percent >= 90 ? 'alert-warning' : 'alert-danger')}">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span><strong>Terproses:</strong> ${data.processed_companies} / ${data.total_companies} perusahaan</span>
+                <span class="badge bg-white text-dark">${data.coverage_percent.toFixed(1)}%</span>
+              </div>
+              <div class="progress" style="height: 8px;">
+                <div class="progress-bar ${data.coverage_percent >= 100 ? 'bg-success' : (data.coverage_percent >= 90 ? 'bg-warning' : 'bg-danger')}" 
+                     style="width: ${data.coverage_percent}%"></div>
+              </div>
+            </div>
+        `;
+        
+        // ✅ This is already correct in your code
+        if (data.missing_companies && data.missing_companies.length > 0) {
+        // ✅ Convert codes to names if available
+        let missingDisplay = data.missing_companies;
+        
+        // If we have company names mapping, use it
+        if (data.company_names) {
+          missingDisplay = data.missing_companies.map(code => 
+            data.company_names[code] || code
+          );
+        }
+        
+        html += `
+          <div class="validation-item error">
+            <div class="fw-bold mb-2">
+              <i class="fas fa-times-circle me-2"></i>
+              Perusahaan Hilang (${data.missing_companies.length})
+            </div>
+            <div class="small">
+              ${missingDisplay.join(', ')}
+            </div>
+          </div>
+        `;
+        } else {
+          html += `
+            <div class="validation-item" style="border-left-color: var(--success-green); background: #f0fdf4;">
+              <div class="fw-bold">
+                <i class="fas fa-check-circle me-2" style="color: var(--success-green);"></i>
+                Semua perusahaan terproses dengan lengkap
+              </div>
+            </div>
+          `;
+        }
+        
+        html += `</div>`;
+        
+        // Data Consistency Section
+        if (data.validation_warnings && data.validation_warnings.length > 0) {
+          html += `
+            <div class="mb-4">
+              <h6 class="fw-bold mb-3">
+                <i class="fas fa-chart-bar me-2" style="color: #ff9800;"></i>
+                Konsistensi Data (${data.validation_warnings.length} Warning)
+              </h6>
+          `;
+          
+          data.validation_warnings.forEach(warning => {
+            html += `
+              <div class="validation-item warning">
+                <div class="fw-bold mb-2">
+                  <i class="fas fa-exclamation-triangle me-2"></i>
+                  ${warning.message}
+                </div>
+                <div class="small">
+                  <strong>Dimensi terlibat:</strong> ${warning.dimensions.join(', ')}
+                </div>
+              </div>
+            `;
+          });
+          
+          html += `</div>`;
+        } else {
+          html += `
+            <div class="mb-4">
+              <h6 class="fw-bold mb-3">
+                <i class="fas fa-chart-bar me-2" style="color: var(--success-green);"></i>
+                Konsistensi Data
+              </h6>
+              <div class="validation-item" style="border-left-color: var(--success-green); background: #f0fdf4;">
+                <div class="fw-bold">
+                  <i class="fas fa-check-circle me-2" style="color: var(--success-green);"></i>
+                  Semua data konsisten antar dimensi
+                </div>
+              </div>
+            </div>
+          `;
+        }
+        
+        modalBody.innerHTML = html;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        modalBody.innerHTML = `
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            Error loading validation details: ${error.message}
+          </div>
+        `;
+      });
+  }
+
+  // Auto dismiss alerts
+  setTimeout(function () {
+    const alerts = document.querySelectorAll(".alert-dismissible");
+    alerts.forEach(function (alert) {
+      const bsAlert = new bootstrap.Alert(alert);
+      bsAlert.close();
+    });
+  }, 5000);
+</script>
+{% endblock %}

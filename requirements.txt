@@ -1,0 +1,23 @@
+# Core Web Framework
+Flask==3.0.0
+Werkzeug==3.0.1
+
+# Configuration
+python-dotenv==1.0.0
+
+# Data Processing
+pandas==2.1.4
+numpy==1.26.2
+openpyxl==3.1.2
+
+# Database
+pyodbc==5.0.1   
+
+# Utilities
+python-dateutil==2.8.2
+psutil==5.9.6
+
+# Production (optional)
+gunicorn==21.2.0
+Flask-Limiter==3.5.0
+Flask-WTF==1.2.1

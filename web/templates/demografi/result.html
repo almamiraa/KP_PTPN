@@ -1,0 +1,367 @@
+{% extends "demografi/base.html" %}
+
+{% block title %}Hasil Konversi - Demografi SDM{% endblock %}
+
+{% block extra_css %}
+<style>
+  .result-container {
+    max-width: 950px;
+    margin: 0 auto;
+    padding-bottom: 50px;
+  }
+
+  .success-card {
+    border: none;
+    border-radius: 24px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    animation: slideUp 0.5s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .result-header {
+    background: linear-gradient(135deg, var(--success-green) 0%, #6bc19b 100%);
+    padding: 40px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .result-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    position: relative;
+    z-index: 1;
+  }
+
+  .stats-result-card {
+    background: linear-gradient(135deg, var(--cream-bg) 0%, #ffffff 100%);
+    border: 2px solid var(--sage-green);
+    border-radius: 18px;
+    padding: 25px;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stats-result-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-green), var(--success-green));
+  }
+
+  .stats-result-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(67, 104, 80, 0.2);
+    border-color: var(--primary-green);
+  }
+
+  .stats-result-card h4 {
+    font-weight: 800;
+    font-size: 2rem;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--primary-green), var(--success-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stats-result-card p {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #64748b;
+    margin-bottom: 0;
+    font-weight: 600;
+  }
+
+  .btn-result-group .btn {
+    padding: 14px 24px;
+    border-radius: 14px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    font-size: 1rem;
+  }
+
+  .btn-download {
+    background: linear-gradient(135deg, var(--success-green) 0%, #6bc19b 100%);
+    color: white;
+    border: none;
+  }
+
+  .btn-download:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(138, 218, 178, 0.4);
+    color: white;
+  }
+
+  .btn-view-data {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+    color: white;
+    border: none;
+  }
+
+  .btn-view-data:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(67, 104, 80, 0.4);
+    color: white;
+  }
+
+  .btn-secondary-action {
+    background: white;
+    color: var(--primary-green);
+    border: 2px solid var(--sage-green);
+  }
+
+  .btn-secondary-action:hover {
+    background: linear-gradient(135deg, var(--cream-bg) 0%, #ffffff 100%);
+    border-color: var(--primary-green);
+    transform: translateY(-3px);
+  }
+
+  .dimensi-table {
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .dimensi-table thead th {
+    background: linear-gradient(135deg, #f7fafc 0%, var(--cream-bg) 100%);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    color: var(--primary-green);
+    font-weight: 700;
+    padding: 18px 20px;
+    border: none;
+  }
+
+  .dimensi-table tbody tr {
+    transition: all 0.2s;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .dimensi-table tbody tr:hover {
+    background: linear-gradient(135deg, var(--cream-bg) 0%, #ffffff 100%);
+    transform: scale(1.01);
+  }
+
+  .dimensi-table tbody td {
+    padding: 16px 20px;
+    vertical-align: middle;
+  }
+
+  .dimensi-name {
+    font-weight: 700;
+    color: var(--primary-green);
+    font-size: 1.05rem;
+  }
+
+  .info-badge {
+    background: linear-gradient(135deg, var(--cream-bg) 0%, #ffffff 100%);
+    border: 2px solid var(--sage-green);
+    border-left: 5px solid var(--primary-green);
+    color: var(--dark-green);
+  }
+
+  .warning-card {
+    border: none;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .warning-header {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    color: #92400e;
+    padding: 16px 24px;
+    border: none;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="result-container py-5">
+  <div class="card success-card">
+    <div class="result-header">
+      <div class="d-flex align-items-center flex-column flex-md-row text-center text-md-start">
+        <div class="success-icon mb-3 mb-md-0 me-md-4">
+          <i class="fas fa-check"></i>
+        </div>
+        <div style="position: relative; z-index: 1;">
+          <h1 class="fw-bold mb-2" style="font-size: 2.2rem;">Konversi Berhasil!</h1>
+          <p class="mb-0 opacity-90 fs-5">Data demografi SDM telah diproses dan siap digunakan</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body p-4 p-md-5">
+      <!-- Info Message -->
+      <div class="alert info-badge border-0 shadow-sm mb-4 d-flex align-items-start">
+        <i class="fas fa-info-circle fs-4 me-3 mt-1"></i>
+        <div>
+          <strong>{{ message }}</strong><br>
+          Diproses untuk <strong>{{ company_count }} perusahaan</strong> dengan 5 dimensi analisis.
+          {% if conversion_id %}
+          <div class="small mt-2 opacity-75">
+            <i class="fas fa-hashtag me-1"></i>
+            ID Konversi: <code class="bg-white px-2 py-1 rounded">{{ conversion_id }}</code>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Statistics Grid -->
+      <div class="row g-3 mb-5">
+        <div class="col-6 col-md-3">
+          <div class="stats-result-card">
+            <h4>{{ "{:,}".format(total_rows) }}</h4>
+            <p>Total Baris</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stats-result-card">
+            <h4>{{ sheets|length }}</h4>
+            <p>Dimensi Data</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stats-result-card">
+            <h4>{{ company_count }}</h4>
+            <p>Perusahaan</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stats-result-card">
+            <h4>{{ "%.2f"|format(duration) }}s</h4>
+            <p>Durasi Proses</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="row g-3 btn-result-group mb-5">
+        <div class="col-md-6">
+          {% if conversion_id %}
+          <a href="{{ url_for('demografi.download', conversion_id=conversion_id) }}" class="btn btn-download w-100 shadow-lg">
+            <i class="fas fa-file-download me-2"></i>Download Hasil Excel
+          </a>
+          {% endif %}
+        </div>
+        <div class="col-md-6">
+          {% if conversion_id %}
+          <a href="{{ url_for('demografi.view_data', conversion_id=conversion_id) }}" class="btn btn-view-data w-100 shadow-lg">
+            <i class="fas fa-database me-2"></i>Lihat Data Database
+          </a>
+          {% endif %}
+        </div>
+        <div class="col-12">
+          <a href="{{ url_for('demografi.index') }}" class="btn btn-secondary-action w-100">
+            <i class="fas fa-redo me-2"></i>Konversi File Lainnya
+          </a>
+        </div>
+      </div>
+
+      <!-- Dimensi Summary Table -->
+      {% if stats %}
+      <div class="dimensi-table">
+        <div class="bg-light px-4 py-3 border-bottom">
+          <h6 class="mb-0 fw-bold d-flex align-items-center">
+            <i class="fas fa-chart-pie me-2" style="color: var(--primary-green);"></i>
+            Ringkasan Data per Dimensi
+          </h6>
+        </div>
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
+            <thead>
+              <tr>
+                <th class="text-start ps-4">Dimensi Analisis</th>
+                <th class="text-center">Jumlah Baris</th>
+                <th class="text-end pe-4">Total Karyawan</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for dimensi, stat in stats.items() %}
+              <tr>
+                <td class="ps-4">
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-{{ 
+                      'venus-mars' if dimensi == 'gender' else
+                      'graduation-cap' if dimensi == 'pendidikan' else
+                      'birthday-cake' if dimensi == 'usia' else
+                      'building' if dimensi == 'unit_kerja' else
+                      'chart-line'
+                    }} me-3" style="color: var(--sage-green);"></i>
+                    <span class="dimensi-name">{{ dimensi.upper() }}</span>
+                  </div>
+                </td>
+                <td class="text-center fw-600">{{ "{:,}".format(stat.rows) }}</td>
+                <td class="text-end pe-4 fw-bold" style="color: var(--success-green); font-size: 1.1rem;">
+                  {{ "{:,}".format(stat.total) }}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Warnings Card -->
+  {% if warnings %}
+  <div class="card warning-card mt-4">
+    <div class="warning-header">
+      <h6 class="mb-0 fw-bold d-flex align-items-center">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        Catatan Proses ({{ warnings|length }})
+      </h6>
+    </div>
+    <div class="card-body p-4">
+      <ul class="mb-0">
+        {% for warning in warnings %}
+        <li class="mb-2 text-muted">{{ warning }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
