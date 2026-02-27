@@ -35,6 +35,7 @@ Mengkonversi data karyawan dari Excel menjadi **5 dimensi analisis**:
 | 📅 **Usia** | Segmentasi usia (<26 sampai >60) | 7 kategori usia |
 | 🏢 **Unit Kerja** | Distribusi per departemen | Per unit bisnis |
 | 📈 **Tren** | Tracking tetap vs non-tetap | Time series data |
+
 **Cakupan:** ±37 perusahaan (Sub Holding + Non PTPN)
 
 ### 2. Modul Cost Management 💰
@@ -42,7 +43,7 @@ Mengkonversi data karyawan dari Excel menjadi **5 dimensi analisis**:
 Mengolah data konsolidasi biaya dengan analisis:
 
 - 💵 Perbandingan REAL vs RKAP
-- 🏢 Agregasi multi-holding (PTPN I - XIII)
+- 🏢 Agregasi multi-holding 
 - 📊 Klasifikasi jenis pembayaran
 - 📅 Analisis tren bulanan & tahunan
 
