@@ -113,8 +113,10 @@ def convert():
         try:
             periode_date = datetime.strptime(periode_input, '%Y-%m-%d')
             
-            # Format 1: YYYY-MM (for column detection & database)
+            # Format 1: YYYY-MM (for column detection )
             period_search = periode_date.strftime('%Y-%m')
+
+            period_db = periode_date.strftime('%Y-%m-%d') 
             
             # Format 2: dd/MM/yyyy (for output display)
             period_full = periode_date.strftime('%d/%m/%Y')
@@ -160,7 +162,7 @@ def convert():
         processor = DataProcessor(config, reader)
         result = processor.process_all_sheets(
             period_search=period_search,  # YYYY-MM for detection
-            period_full=period_full        # dd/MM/yyyy for output
+            period_full=period_db        # dd/MM/yyyy for output
         )
         
         if not result or len(result) == 0:
@@ -229,7 +231,7 @@ def convert():
                     conn,
                     original_filename=file.filename,
                     output_filename="N/A",
-                    periode=period_search,
+                    periode=period_db,
                     perusahaan=f"{validation_result.processed_companies}/{validation_result.total_companies} companies",
                     total_rows=len(result),
                     duration=duration,
@@ -281,7 +283,7 @@ def convert():
                 conn,
                 original_filename=file.filename,
                 output_filename=output_filename,
-                periode=period_search,
+                periode=period_db,
                 perusahaan=f"{validation_result.processed_companies}/{validation_result.total_companies} companies",
                 total_rows=len(result),
                 duration=duration,
@@ -566,8 +568,8 @@ def dashboard():
             cursor.execute("""
                 SELECT COUNT(*) 
                 FROM cost_data 
-                WHERE RIGHT(periode, 4) = ?
-            """, (str(selected_year),))  # ← FIX: Use RIGHT() and str()
+                WHERE YEAR(periode) = ?
+            """, (selected_year,)) 
             count = cursor.fetchone()[0]
             cursor.close()
             has_data = count > 0

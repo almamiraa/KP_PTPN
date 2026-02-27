@@ -389,10 +389,10 @@
               <!-- Periode -->
               <td class="text-center">
                 {% if row.periode %}
-                  {% set month_num = row.periode.split('-')[1] | int %}
+                  {% set month_num = row.periode.month %}
                   <span class="badge badge-periode month-{{ month_num }}">
                     <i class="far fa-calendar-alt me-1"></i>
-                    {{ row.periode}}  {# Show: 2025-02-20 or 2025-02 #}
+                    {{ row.periode.strftime('%Y-%m-%d') }}  
                   </span>
                 {% else %}
                   <span class="text-muted">-</span>
@@ -402,9 +402,8 @@
               <!-- Bulan & Tahun -->
               <td class="text-center">
                 {% if row.periode %}
-                  {% set parts = row.periode.split('-') %}
-                  {% set year = parts[0] %}
-                  {% set month_num = parts[1] | int %}
+                  {% set month_num = row.periode.month %}
+                  {% set year = row.periode.year %}
                   
                   {% set months_id = {
                     1: 'Januari', 2: 'Februari', 3: 'Maret', 4: 'April',

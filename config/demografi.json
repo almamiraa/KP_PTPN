@@ -140,13 +140,6 @@
       "holding": "PTPN I",
       "kategori": "Sub Holding"
     },
-    "Supp Co Reg 4": {
-      "kode_perusahaan": "6S00",
-      "nama": "Supp Co Reg 4",
-      "sheet_name": "SuppCo_Reg4",
-      "holding": "PTPN I",
-      "kategori": "Sub Holding"
-    },
     "Supp Co Reg 5": {
       "kode_perusahaan": "7S00",
       "nama": "Supp Co Reg 5",
@@ -258,6 +251,13 @@
       "sheet_name": "MKSO",
       "kategori": "Sub Holding",
       "holding": "SGN"
+    },
+    "Supp Co Reg 4": {
+      "kode_perusahaan": "6S00",
+      "nama": "Supp Co Reg 4",
+      "sheet_name": "SuppCo_Reg4",
+      "kategori": "Sub Holding",
+      "holding": "PTPN I"
     }
   },
   "mapping_cell": {

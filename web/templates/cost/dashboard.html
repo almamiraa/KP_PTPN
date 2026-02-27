@@ -336,14 +336,14 @@
 
   {% else %}
   <!-- Empty State -->
-  <div class="chart-section empty-state-container d-flex align-items-center justify-content-center">
+  <div class="chart-section empty-state-container d-flex align-items-center justify-content-center w-100">
     <div class="text-center p-5">
       <div class="mb-4 d-flex justify-content-center">
         <div class="empty-icon-wrapper">
           <i class="fas fa-chart-bar fa-3x"></i>
         </div>
       </div>
-      <h4 class="fw-bold mb-2" style="color: var(--primary-green);">
+      <h4 class="fw-bold mb-2" style="color: var(--primary-green);" >
         {% if selected_year %}
         Tidak Ada Data untuk Tahun {{ selected_year }}
         {% else %}

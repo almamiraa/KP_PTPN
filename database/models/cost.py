@@ -21,7 +21,7 @@ CREATE_COST_TABLES = {
             created_at DATETIME NOT NULL DEFAULT GETDATE(),
             original_filename NVARCHAR(255) NOT NULL,
             output_filename NVARCHAR(255),
-            periode NVARCHAR(20) NOT NULL,
+            periode DATE NOT NULL,
             perusahaan NVARCHAR(100),
             total_rows INT DEFAULT 0,
             duration FLOAT DEFAULT 0,
@@ -46,7 +46,7 @@ CREATE_COST_TABLES = {
             upload_id INT NOT NULL,
             holding NVARCHAR(50) NOT NULL,
             kode_perusahaan NVARCHAR(10) NOT NULL,
-            periode NVARCHAR(20) NOT NULL,
+            periode DATE NOT NULL,
             payment_type NVARCHAR(20) NOT NULL,
             cost_description NVARCHAR(255) NOT NULL,
             real_bulan_ini DECIMAL(18,2),
@@ -227,16 +227,7 @@ class CostUploadHistory:
     
     @staticmethod
     def get_by_id(conn, upload_id: int) -> dict:
-        """
-        Get single upload history by ID with validation data
-        
-        Args:
-            conn: Database connection
-            upload_id: Upload ID
-        
-        Returns:
-            Upload history record dict or None
-        """
+       
         cursor = conn.cursor()
         
         cursor.execute("""
@@ -299,16 +290,7 @@ class CostData:
     
     @staticmethod
     def insert_batch(conn, upload_id: int, data_list: list) -> int:
-        """
-        Insert multiple cost data rows
-        
-        Args:
-            upload_id: ID dari upload_history
-            data_list: List of dicts with cost data
-        
-        Returns:
-            int: Number of rows inserted
-        """
+       
         if not data_list:
             logger.warning("No cost data to insert")
             return 0
@@ -438,15 +420,7 @@ class CostData:
     
     @staticmethod
     def get_dashboard_summary(conn, periode: str = None) -> dict:
-        """
-        Get summary data for dashboard
-        
-        Args:
-            periode: Filter by periode (optional, format: YYYY-MM)
-        
-        Returns:
-            Dict with summary statistics
-        """
+       
         cursor = conn.cursor()
         
         # Build query with optional periode filter
@@ -543,10 +517,7 @@ class CostData:
     
     @staticmethod
     def get_visualization_data(conn, upload_id: int) -> dict:
-        """
-        Get aggregated data for visualization of single upload
-        Returns data for charts - ✅ NOW WITH 4 VALUES
-        """
+       
         cursor = conn.cursor()
         
         # 1. Total REAL vs RKAP (all 4 values)
@@ -653,7 +624,7 @@ class CostData:
         """Get list of available years from cost data"""
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT DISTINCT RIGHT(periode, 4) as year
+            SELECT DISTINCT YEAR(periode) as year
             FROM cost_data
             WHERE periode IS NOT NULL AND periode != ''
             ORDER BY year DESC
@@ -666,12 +637,7 @@ class CostData:
     
     @staticmethod
     def get_yearly_dashboard_data(conn, year: int) -> dict:
-        """
-        Get comprehensive yearly data for dashboard
-        ✅ Handles duplicate months - takes LATEST upload (highest upload_id)
-        ✅ Format periode: dd-MM-yyyy (e.g., 01-12-2025)
-        ✅ Returns 4 values: REAL bulan, REAL SD, RKAP bulan, RKAP SD
-        """
+      
         cursor = conn.cursor()
         year_str = str(year)
         
@@ -680,7 +646,7 @@ class CostData:
             WITH LatestUploads AS (
                 SELECT periode, MAX(upload_id) as latest_upload_id
                 FROM cost_data
-                WHERE RIGHT(periode, 4) = ?
+                WHERE YEAR(periode) = ?
                 GROUP BY periode
             )
             SELECT 
@@ -711,13 +677,12 @@ class CostData:
         # ========== 2. MONTHLY TREND ==========
         cursor.execute("""
             WITH LatestUploadPerMonth AS (
-                -- Get latest upload_id for each MONTH (not each periode date)
                 SELECT 
-                    SUBSTRING(periode, 4, 2) as month_num,
+                    MONTH(periode) as month_num,
                     MAX(upload_id) as latest_upload_id
                 FROM cost_data
-                WHERE RIGHT(periode, 4) = ?
-                GROUP BY SUBSTRING(periode, 4, 2)
+                WHERE YEAR(periode) = ?
+                GROUP BY MONTH(periode)
             )
             SELECT 
                 lum.month_num,
@@ -727,11 +692,11 @@ class CostData:
                 SUM(cd.rkap_sd) as monthly_rkap_sd
             FROM cost_data cd
             INNER JOIN LatestUploadPerMonth lum 
-                ON SUBSTRING(cd.periode, 4, 2) = lum.month_num
+                ON MONTH(cd.periode) = lum.month_num
                 AND cd.upload_id = lum.latest_upload_id
             GROUP BY lum.month_num
             ORDER BY lum.month_num
-        """, (year_str,))
+        """, (year,)) 
 
         monthly_data = cursor.fetchall()
 
@@ -749,7 +714,6 @@ class CostData:
 
         for row in monthly_data:
             month_num = int(row[0])  # month_num
-            
             monthly['labels'].append(month_abbr[month_num - 1])
             monthly['real_values'].append(float(row[1]) if row[1] else 0)
             monthly['rkap_values'].append(float(row[2]) if row[2] else 0)
@@ -757,11 +721,11 @@ class CostData:
             monthly['rkap_sd_values'].append(float(row[4]) if row[4] else 0)
             
             # ========== 3. BY HOLDING ==========
-            cursor.execute("""
+        cursor.execute("""
                 WITH LatestUploads AS (
                     SELECT periode, MAX(upload_id) as latest_upload_id
                     FROM cost_data
-                    WHERE RIGHT(periode, 4) = ?
+                    WHERE YEAR(periode) = ?
                     GROUP BY periode
                 )
                 SELECT 
@@ -778,9 +742,9 @@ class CostData:
                 ORDER BY cd.holding
             """, (year_str,))
             
-            holdings_data = cursor.fetchall()
+        holdings_data = cursor.fetchall()
             
-            holdings = {
+        holdings = {
                 'labels': [],
                 'real_values': [],
                 'real_sd_values': [],
@@ -788,7 +752,7 @@ class CostData:
                 'rkap_sd_values': []
             }
             
-            for row in holdings_data:
+        for row in holdings_data:
                 holdings['labels'].append(row[0])
                 holdings['real_values'].append(float(row[1]) if row[1] else 0)
                 holdings['rkap_values'].append(float(row[2]) if row[2] else 0)
@@ -800,7 +764,7 @@ class CostData:
             WITH LatestUploads AS (
                 SELECT periode, MAX(upload_id) as latest_upload_id
                 FROM cost_data
-                WHERE RIGHT(periode, 4) = ?
+                WHERE YEAR(periode) = ?
                 GROUP BY periode
             )
             SELECT 
@@ -839,7 +803,7 @@ class CostData:
             WITH LatestUploads AS (
                 SELECT periode, MAX(upload_id) as latest_upload_id
                 FROM cost_data
-                WHERE RIGHT(periode, 4) = ?
+                WHERE YEAR(periode) = ?
                 GROUP BY periode
             )
             SELECT TOP 10
@@ -883,7 +847,7 @@ class CostData:
                 SUM(real_bulan_ini) as total_real,
                 SUM(rkap_bulan_ini) as total_rkap
             FROM cost_data
-            WHERE YEAR(CAST(periode AS DATE)) = ?
+            WHERE YEAR(periode) = ?
             GROUP BY payment_type
             ORDER BY SUM(real_bulan_ini) DESC
         """, (year,))
@@ -911,7 +875,7 @@ class CostData:
                 SUM(real_bulan_ini) as total_real,
                 SUM(rkap_bulan_ini) as total_rkap
             FROM cost_data
-            WHERE YEAR(CAST(periode AS DATE)) = ?
+            WHERE YEAR(periode) = ?
             GROUP BY cost_description
             ORDER BY SUM(real_bulan_ini) DESC
         """, (year,))

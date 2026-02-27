@@ -7,6 +7,7 @@ Module untuk memproses dan extract data dari Excel
 from typing import List, Dict, Any, Optional
 import logging
 from .column_detector import ColumnDetector
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -127,7 +128,7 @@ class DataProcessor:
             data_row = {
                 'holding': perusahaan_data['holding'],
                 'kode_perusahaan': perusahaan_data['kode_perusahaan'],
-                 'periode': period_full.replace('/', '-'),  
+                'periode': period_full,
                 'payment_type': cost_info['payment_type'],
                 'cost_description': cost_info['cost_description'],
                 'REAL': real_bulan,
